@@ -171,7 +171,7 @@ remove(nouvaux);
 }
 
 int creerNouvauxCompt(char *nom,const char  *password){
-    // if retrun 1 si tout a fait bien si usrmame deja exite 0 ou -1 si le mot de passe went  wrong
+    // if retrun 1 si tout a fait bien si username deja exite 0 ou -1 si le mot de passe went  wrong
 FILE *flot;
 int cle;
 joueur A;
@@ -227,7 +227,7 @@ return 1;
 
 int verfieUnCompt(joueur *A, const char *nom,const char *password){
      
-    // si  return 0 si compte nexiste pas 
+    //si return 0 si compte nexiste pas 
     //si return 1 vrai 
     //si return -1 mot de passe est faux 
 
