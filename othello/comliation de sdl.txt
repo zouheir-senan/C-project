@@ -1,0 +1,6 @@
+g++ -std=c17++ main.cpp -I{Path to SDL2\include} -L{Path to SDL2\lib} -Wall -lmingw32 -lSDL2main -lSDL2 -o main
+
+
+gcc -std=c17 main.c -IC:\Users\Zouheir\Desktop\SDL2 -LC:\Users\Zouheir\Desktop\SDL2\lib -Wall -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -o main
+
+gcc -std=c17 SDLTEST.c fonction_Tritement_fichier.c -IC:\Users\Zouheir\Desktop\projectc\othello -LC:\Users\Zouheir\Desktop\projectc\othello\lib -Wall -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -o main
