@@ -1,3 +1,7 @@
 {
-    "C_Cpp.errorSquiggles": "Disabled"
+    "C_Cpp.errorSquiggles": "Disabled",
+    "files.associations": {
+        "fonction_tritement_fichier.h": "c",
+        "logique_jeu.h": "c"
+    }
 }
