@@ -8,6 +8,60 @@
 #include "logique_jeu.h"
 #define widthtab_surwidthwin 0.53
 #define heighthtab_surheighthwin 0.841099163
+typedef struct jeuSDL
+{
+    color joueur;
+    int x;
+    int y;
+}move;
+typedef struct pliemove  // plie des move 
+{   
+int nbr;
+move toutMove[65]; 
+}pliemove;
+
+int testpile(pliemove pile)
+{
+if(pile.nbr==-1) return 0;
+else return 1;
+}
+void ajouterMOVE(int x,int y,color joueur,pliemove *pile)
+{
+pile->nbr++;
+pile->toutMove[pile->nbr].x=x;
+pile->toutMove[pile->nbr].y=y;
+pile->toutMove[pile->nbr].joueur=joueur;
+return;
+}
+void jeupresdent(color T[][8],pliemove pile)
+{
+    color COPIE[8][8];
+    init_TabAvide(COPIE);
+    recomencer(COPIE);
+    if(testpile(pile))
+    {
+        int x=pile.toutMove[pile.nbr].x;
+        int y=pile.toutMove[pile.nbr].y;
+        T[x][y]=vide;
+        pile.nbr--;
+    for(int g=0;g<pile.nbr;g++)
+    {
+    transformerpierre(COPIE,pile.toutMove[g].x,pile.toutMove[g].y,pile.toutMove[g].joueur);       
+    }
+    for(int m=0;m<8;m++)
+    {
+    for(int j=0;j<8;j++)
+    {
+                    T[m][j]=COPIE[m][j];
+    }
+    }
+    }
+    return;
+
+
+}
+ 
+  
 
 void SDL_ExitWithError(const char *message,SDL_Window *win,SDL_Renderer *renderer)
 {
@@ -60,11 +114,9 @@ if(i>=8||j>=8)
 
 return 1;
 }
-SDL_Renderer *changerlatableaux(color T[][8],SDL_Renderer *renderer,SDL_Texture *textjeu[][8],int K[][25],int nb,SDL_Rect rectab,SDL_Rect rectjeu[][8]){
+SDL_Renderer *changerlatableaux(color T[][8],SDL_Renderer *renderer,SDL_Texture *textblac,SDL_Texture *textnoire,SDL_Texture *textpoint,int K[][25],int nb,SDL_Rect rectab,SDL_Rect rectjeu[][8],int Boll){
 
-SDL_Surface *Noire=IMG_Load("noir.png");
-SDL_Surface *Blanc=IMG_Load("blanc.png");
-SDL_Surface *Point=IMG_Load("pointvert.png");
+
 
     int i=0,j=0;
 
@@ -76,29 +128,31 @@ SDL_Surface *Point=IMG_Load("pointvert.png");
             for(j=0;j<8;j++){
                     if(T[i][j]==blanc)
                     {
-                    textjeu[i][j]=SDL_CreateTextureFromSurface(renderer,Blanc); 
+                    
                     makerect(&rectjeu[i][j],a+w*i,b+h*j,w,h);
-                    SDL_RenderCopy(renderer,textjeu[i][j],NULL,&rectjeu[i][j]);
+                    SDL_RenderCopy(renderer,textblac,NULL,&rectjeu[i][j]);
                     }
                     if(T[i][j]==noire)
                     {
-                    textjeu[i][j]=SDL_CreateTextureFromSurface(renderer,Noire);  
+                    
+                      
                     makerect(&rectjeu[i][j],a+w*i,b+h*j,w,h);
-                    SDL_RenderCopy(renderer,textjeu[i][j],NULL,&rectjeu[i][j]);
+                    SDL_RenderCopy(renderer,textnoire,NULL,&rectjeu[i][j]);
                     }
                    
             }
         }
-for(int k=0;k<nb;k++)
+if (Boll)
 {
-    i=K[0][k],j=K[1][k];
-    textjeu[i][j]=SDL_CreateTextureFromSurface(renderer,Point);  
-    makerect(&rectjeu[i][j],a+w*i,b+h*j,w,h);
-    SDL_RenderCopy(renderer,textjeu[i][j],NULL,&rectjeu[i][j]);
+    for(int k=0;k<nb;k++)
+    {
+        i=K[0][k],j=K[1][k];
+        
+        makerect(&rectjeu[i][j],a+w*i,b+h*j,w,h);
+        SDL_RenderCopy(renderer,textpoint,NULL,&rectjeu[i][j]);
+    }
 }
-SDL_FreeSurface(Blanc);
-SDL_FreeSurface(Noire);
-SDL_FreeSurface(Point);
+
 return renderer;
 
 
@@ -120,20 +174,32 @@ return NULL;
  SDL_FreeSurface(tmp);
  if(NULL == texture)
 {
-fprintf(stderr,
-"Erreur SDL_CreateTextureFromSurface : %s",
-SDL_GetError());
+fprintf(stderr,"Erreur SDL_CreateTextureFromSurface : %s",SDL_GetError());
 return NULL;
 }
 return texture;
 }
 
+int Score(color T[][8],color jou)
+{
+int n=0;
+for (int i = 0; i <8; i++)
+{
+    for (int j=0; j<8;j++)
+    {
+        if(T[i][j]==jou) n++;
+    }
+    
+}
+return n;
+}
 
 int main(int argc, char* argv[])
 {
     SDL_Window *win = NULL;
     SDL_Renderer *renderer = NULL;
     int posX = SDL_WINDOWPOS_CENTERED, posY = SDL_WINDOWPOS_CENTERED, width = 1020, height = 600;
+    int machine=0,deujoueur=0,joueur1,joueur2,recm=0,bloq1=0,bloq=0,afficheTop=0,affichemove=0,nivaux=0;
     // intiSDL
     if(SDL_Init(SDL_INIT_VIDEO)!=0) SDL_ExitWithError("Initialisation",NULL,NULL);
     // win
@@ -150,35 +216,58 @@ int main(int argc, char* argv[])
     //texture declartion
     SDL_Texture *TexMain=NULL;
     SDL_Texture *Textab=NULL;
-    SDL_Texture *textjeu[8][8];
-    int i,j;
-    for(i=0;i<8;i++){
-        for(j=0;j<8;j++)
-        {
-            textjeu[i][j]=NULL;
-        }
-    }
+    SDL_Texture *textBlanc=NULL;
+    SDL_Texture *textNoire=NULL;
+    SDL_Texture *textPoint=NULL;
+    SDL_Texture *text2joueur=loadImage("image/2joueur.png",renderer);
+    SDL_Texture *textcolorblanc=loadImage("image/colorblach.png",renderer);
+    SDL_Texture *textcolornoire=loadImage("image/colornoire.png",renderer);
+    SDL_Texture *textdifficle=loadImage("image/Difficile.png",renderer);
+    SDL_Texture *textfacile=loadImage("image/facile.png",renderer);
+    SDL_Texture *textliste=loadImage("image/list desmovement.png",renderer);
+    SDL_Texture *textmove=loadImage("image/move.png",renderer);
+    SDL_Texture *textmoyen=loadImage("image/moyen.png",renderer);
+    SDL_Texture *textrecm=loadImage("image/RECOMMENCER.png",renderer);
+    SDL_Texture *text10top=loadImage("image/TOP10.png",renderer);
+
+
+
+
+   
 
     //fin
+
+
 
     //texture surface
     SDL_Surface *SurfaceMain=NULL;
     SDL_Surface *Surfacetab=NULL;
-
-
+    SDL_Surface *Noire=NULL;
+    SDL_Surface *Blanc=NULL;
+    SDL_Surface *Point=NULL;    
     //fin
     //IMG_Load
     SurfaceMain=IMG_Load("image1.jpg");
     Surfacetab=IMG_Load("tabe.png");
-
+    Noire=IMG_Load("noir.png");
+    Blanc=IMG_Load("blanc.png");
+    Point=IMG_Load("pointvert.png");
     //fin
     // ceration texture
     TexMain=SDL_CreateTextureFromSurface(renderer,SurfaceMain);
     Textab=SDL_CreateTextureFromSurface(renderer,Surfacetab);
+    textBlanc=SDL_CreateTextureFromSurface(renderer,Blanc);
+    textNoire=SDL_CreateTextureFromSurface(renderer,Noire);
+    textPoint=SDL_CreateTextureFromSurface(renderer,Point);
+
+
     // fin
     // free Surface
     SDL_FreeSurface(SurfaceMain);
     SDL_FreeSurface(Surfacetab);
+    SDL_FreeSurface(Blanc);
+    SDL_FreeSurface(Noire);
+    SDL_FreeSurface(Point);
 
     // fin
     SDL_bool done = SDL_FALSE;
@@ -199,6 +288,8 @@ int main(int argc, char* argv[])
         int score;
         int x,y;
         remplissage(K,T,noire,&nb);
+       
+
         
         //fin
     while (!done)
@@ -206,7 +297,7 @@ int main(int argc, char* argv[])
 
        
         // rectangle
-        SDL_Rect rectMain,rectTabe,rectjeu[8][8];
+        SDL_Rect rectMain,rectTabe,rectjeu[8][8],rectVSjoueur,rectVSOrdiN1,rectVSOrdiN2,rectVSOrdiN3;
         SDL_GetWindowSize(win,&(rectMain.w),&(rectMain.h));
         makerect(&rectMain,0,0,rectMain.w,rectMain.h);
       
@@ -214,15 +305,30 @@ int main(int argc, char* argv[])
 
         // fin
         // prepartion de renderer 
-        if(faitevnt){
+        // le coix de joueur
+        SDL_RenderClear(renderer);
+
+
+        SDL_RenderPresent(renderer);
+        //fin
+        // le coix de dificulte
+        SDL_RenderClear(renderer);
+
+        SDL_RenderPresent(renderer);
+        //fin
+        // le coix de color
+        SDL_RenderClear(renderer);
+
+        SDL_RenderPresent(renderer);
+        // fin
+
         SDL_RenderClear(renderer);
         
         SDL_RenderCopy(renderer,TexMain,NULL,&rectMain);
         SDL_RenderCopy(renderer,Textab,NULL,&rectTabe);
-        renderer=changerlatableaux(T,renderer,textjeu,K,nb,rectTabe,rectjeu);
-        faitevnt=0;
-        }
+        renderer=changerlatableaux(T,renderer,textBlanc,textNoire,textPoint,K,nb,rectTabe,rectjeu,1); 
         SDL_RenderPresent(renderer);
+
         //fin
         SDL_Event event;
         
@@ -238,7 +344,7 @@ int main(int argc, char* argv[])
                     if(event.button.button==SDL_BUTTON_LEFT){
                         faitevnt=1;
                     if(SDL_GetCaseclick(rectTabe,event.button.x,event.button.y,&x,&y)) jeu(T,K,&nb,blanc,x,y);
-                    else jeuAI(T,K,&nb,noire,3,K2);
+                    else jeuAI(T,K,&nb,noire,25,K2);//jeualeatoire(T,K,&nb,noire);
                     }
 
                     break;
@@ -257,7 +363,11 @@ int main(int argc, char* argv[])
 
     }
 
-    SDL_DestroyTexture(textjeu);
+    SDL_DestroyTexture(textPoint);
+    SDL_DestroyTexture(textBlanc);
+    SDL_DestroyTexture(textNoire);
+
+
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(win);
     SDL_Quit();
