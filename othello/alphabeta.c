@@ -707,19 +707,15 @@ return 0;
 void jeuAI(color T[][8],int K[2][25],int *nb,color pi,int depth,int K2[2]){
     
     int K2[2];
-    int r;
-    int x1=0;
-    int x2=0;
-    int max2=0;
+    
+
     int K1[2][25];
     int value=0;
     color COPIE[8][8];
-    int h=0;
-    int k=0;
-    char co1;
-    char co2;
-    int i=0,j=0,n=0;
-    color c=blanc;// sss
+   
+   
+ 
+   
             for(int g=0;g<8;g++)
             {
                 for(int j=0;j<8;j++)

@@ -219,7 +219,7 @@ int main(int argc, char* argv[])
     SDL_Texture *textBlanc=NULL;
     SDL_Texture *textNoire=NULL;
     SDL_Texture *textPoint=NULL;
-    SDL_Texture *text2joueur=loadImage("image/2joueur.png",renderer);
+ /*   SDL_Texture *text2joueur=loadImage("image/2joueur.png",renderer);
     SDL_Texture *textcolorblanc=loadImage("image/colorblach.png",renderer);
     SDL_Texture *textcolornoire=loadImage("image/colornoire.png",renderer);
     SDL_Texture *textdifficle=loadImage("image/Difficile.png",renderer);
@@ -228,7 +228,7 @@ int main(int argc, char* argv[])
     SDL_Texture *textmove=loadImage("image/move.png",renderer);
     SDL_Texture *textmoyen=loadImage("image/moyen.png",renderer);
     SDL_Texture *textrecm=loadImage("image/RECOMMENCER.png",renderer);
-    SDL_Texture *text10top=loadImage("image/TOP10.png",renderer);
+    SDL_Texture *text10top=loadImage("image/TOP10.png",renderer);*/
 
 
 
@@ -248,10 +248,12 @@ int main(int argc, char* argv[])
     //fin
     //IMG_Load
     SurfaceMain=IMG_Load("image1.jpg");
+    
     Surfacetab=IMG_Load("tabe.png");
     Noire=IMG_Load("noir.png");
     Blanc=IMG_Load("blanc.png");
     Point=IMG_Load("pointvert.png");
+    
     //fin
     // ceration texture
     TexMain=SDL_CreateTextureFromSurface(renderer,SurfaceMain);
@@ -292,12 +294,13 @@ int main(int argc, char* argv[])
 
         
         //fin
+        //fin
     while (!done)
     {
 
        
         // rectangle
-        SDL_Rect rectMain,rectTabe,rectjeu[8][8],rectVSjoueur,rectVSOrdiN1,rectVSOrdiN2,rectVSOrdiN3;
+        SDL_Rect rectMain,rectTabe,rectjeu[8][8];
         SDL_GetWindowSize(win,&(rectMain.w),&(rectMain.h));
         makerect(&rectMain,0,0,rectMain.w,rectMain.h);
       
@@ -305,23 +308,7 @@ int main(int argc, char* argv[])
 
         // fin
         // prepartion de renderer 
-        // le coix de joueur
-        SDL_RenderClear(renderer);
-
-
-        SDL_RenderPresent(renderer);
-        //fin
-        // le coix de dificulte
-        SDL_RenderClear(renderer);
-
-        SDL_RenderPresent(renderer);
-        //fin
-        // le coix de color
-        SDL_RenderClear(renderer);
-
-        SDL_RenderPresent(renderer);
-        // fin
-
+       
         SDL_RenderClear(renderer);
         
         SDL_RenderCopy(renderer,TexMain,NULL,&rectMain);
@@ -329,6 +316,7 @@ int main(int argc, char* argv[])
         renderer=changerlatableaux(T,renderer,textBlanc,textNoire,textPoint,K,nb,rectTabe,rectjeu,1); 
         SDL_RenderPresent(renderer);
 
+        //fin
         //fin
         SDL_Event event;
         
@@ -344,7 +332,7 @@ int main(int argc, char* argv[])
                     if(event.button.button==SDL_BUTTON_LEFT){
                         faitevnt=1;
                     if(SDL_GetCaseclick(rectTabe,event.button.x,event.button.y,&x,&y)) jeu(T,K,&nb,blanc,x,y);
-                    else jeuAI(T,K,&nb,noire,25,K2);//jeualeatoire(T,K,&nb,noire);
+                    else jeualeatoire(T,K,&nb,noire);//; jeuAI(T,K,&nb,noire,8,K2)
                     }
 
                     break;
