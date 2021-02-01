@@ -582,11 +582,19 @@ void jeuAI(color T[][8],int K[2][25],int *nb,color pi,int depth,int K2[2])
 {
     
    
-    
+    int r;
+    int x1=0;
+    int x2=0;
+    int max2=0;
     int K1[2][25];
     int value=0;
     color COPIE[8][8];
-   
+    int h=0;
+    int k=0;
+    char co1;
+    char co2;
+    int i=0,j=0,n=0;
+    color c=blanc;// sss
             for(int g=0;g<8;g++)
             {
                 for(int j=0;j<8;j++)
@@ -599,9 +607,7 @@ void jeuAI(color T[][8],int K[2][25],int *nb,color pi,int depth,int K2[2])
                 K1[0][g]=K[0][g];
                 K1[1][g]=K[1][g];
             }
-        printf("zou");
             value=alphabeta(depth,1,COPIE,pi,K1,-999,999);
-            printf("%d\n",value);
              for(int g=0;g<8;g++)
             {
                 for(int j=0;j<8;j++)
@@ -609,12 +615,9 @@ void jeuAI(color T[][8],int K[2][25],int *nb,color pi,int depth,int K2[2])
                     COPIE[g][j]=T[g][j];
                 }
             }
-        printf("heir\n");
             testvalue(*nb,K,value,depth,COPIE,pi,K2);
-       printf("%d,%d\n",K2[0],K2[1]);
-           
+            printf("%d,%d\n",K2[0],K2[1]);
             transformerpierre(T,K2[0],K2[1],pi);
-            
             remplissage(K,T,Adversaire(pi),nb);
 
 }
@@ -645,5 +648,5 @@ int jeu(color T[][8],int K[2][25],int *nb,color pi,int x,int y)
 color Adversaire(color pi){
     if(pi==noire) return blanc;
     if(pi==blanc) return noire;
-return vide;
+
 }

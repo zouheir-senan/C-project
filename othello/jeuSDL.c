@@ -6,6 +6,7 @@
 #include "SDL2/SDL_ttf.h"
 #include "fonction_Tritement_fichier.h"
 #include "logique_jeu.h"
+#include<time.h>
 #define widthtab_surwidthwin 0.53
 #define heighthtab_surheighthwin 0.841099163
 typedef struct jeuSDL
@@ -61,7 +62,15 @@ void jeupresdent(color T[][8],pliemove pile)
 
 }
  
-  
+int SDL_click(SDL_Rect rec,SDL_Event evt ){
+
+int x=evt.button.x;
+int y=evt.button.y;
+
+if((x>rec.x&&x<(rec.x+rec.w))&&(y>rec.y&&y<(rec.y+rec.h))) return 1;
+
+return 0;
+}
 
 void SDL_ExitWithError(const char *message,SDL_Window *win,SDL_Renderer *renderer)
 {
@@ -144,7 +153,7 @@ SDL_Renderer *changerlatableaux(color T[][8],SDL_Renderer *renderer,SDL_Texture 
         }
 if (Boll)
 {
-    for(int k=0;k<nb;k++)
+  for(int k=0;k<nb;k++)
     {
         i=K[0][k],j=K[1][k];
         
@@ -164,15 +173,15 @@ SDL_Texture *loadImage(const char path[], SDL_Renderer *renderer)
 {
  SDL_Surface *tmp = NULL;
  SDL_Texture *texture = NULL;
- tmp = SDL_LoadBMP(path);
- if(NULL == tmp)
+ tmp=IMG_Load(path);
+ if(NULL==tmp)
 {
  fprintf(stderr, "Erreur SDL_LoadBMP : %s",SDL_GetError());
 return NULL;
 }
- texture = SDL_CreateTextureFromSurface(renderer, tmp);
+ texture=SDL_CreateTextureFromSurface(renderer, tmp);
  SDL_FreeSurface(tmp);
- if(NULL == texture)
+ if(NULL==texture)
 {
 fprintf(stderr,"Erreur SDL_CreateTextureFromSurface : %s",SDL_GetError());
 return NULL;
@@ -199,11 +208,11 @@ int main(int argc, char* argv[])
     SDL_Window *win = NULL;
     SDL_Renderer *renderer = NULL;
     int posX = SDL_WINDOWPOS_CENTERED, posY = SDL_WINDOWPOS_CENTERED, width = 1020, height = 600;
-    int machine=0,deujoueur=0,joueur1,joueur2,recm=0,bloq1=0,bloq=0,afficheTop=0,affichemove=0,nivaux=0;
+    int machine=0,deujoueur=0,joueur1,joueur2,recm=0,bloq1=0,bloq=0,afficheTop=0,affichemove=0,nivaux=0,win1=1,win2=0,win3=0,Boll=1;
     // intiSDL
     if(SDL_Init(SDL_INIT_VIDEO)!=0) SDL_ExitWithError("Initialisation",NULL,NULL);
     // win
-    win=SDL_CreateWindow("Otholle", posX, posY, width, height, SDL_WINDOW_MAXIMIZED|SDL_WINDOW_RESIZABLE);
+    win=SDL_CreateWindow("Otholle", posX, posY, width, height,SDL_WINDOW_MAXIMIZED|SDL_WINDOW_RESIZABLE); //
     if(win==NULL) SDL_ExitWithError("CreateWindow",win,NULL);
     // renderer
     renderer=SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
@@ -219,7 +228,7 @@ int main(int argc, char* argv[])
     SDL_Texture *textBlanc=NULL;
     SDL_Texture *textNoire=NULL;
     SDL_Texture *textPoint=NULL;
- /*   SDL_Texture *text2joueur=loadImage("image/2joueur.png",renderer);
+    SDL_Texture *text2joueur=loadImage("image/2joueur.png",renderer);
     SDL_Texture *textcolorblanc=loadImage("image/colorblach.png",renderer);
     SDL_Texture *textcolornoire=loadImage("image/colornoire.png",renderer);
     SDL_Texture *textdifficle=loadImage("image/Difficile.png",renderer);
@@ -228,7 +237,7 @@ int main(int argc, char* argv[])
     SDL_Texture *textmove=loadImage("image/move.png",renderer);
     SDL_Texture *textmoyen=loadImage("image/moyen.png",renderer);
     SDL_Texture *textrecm=loadImage("image/RECOMMENCER.png",renderer);
-    SDL_Texture *text10top=loadImage("image/TOP10.png",renderer);*/
+    SDL_Texture *text10top=loadImage("image/TOP10.png",renderer);
 
 
 
@@ -283,46 +292,122 @@ int main(int argc, char* argv[])
         init_TabAvide(T);
         
         recomencer(T);
-        T[3][5]=blanc;
+ 
         int K[2][25];
         int K2[2]={-1,-1};
         int nb=9;
         int score;
         int x,y;
-        remplissage(K,T,noire,&nb);
-       
 
+       color pi=vide,round=vide;
+       
+        srand(time(NULL));
         
-        //fin
+       int n=rand()%2;
+       if(n)round=noire;
+       else round=blanc;
+        remplissage(K,T,round,&nb);
+        printf("%d\n",n);
         //fin
     while (!done)
     {
 
        
         // rectangle
-        SDL_Rect rectMain,rectTabe,rectjeu[8][8];
+        SDL_Rect rectMain,rectTabe,rectjeu[8][8],rectVSjoueur,rectVSOrdiN1,rectVSOrdiN2,rectVSOrdiN3,rectBlanc,rectNoire,rectRecm,rectAffichierMove,rectTOPE10,rectlistemovem,rect1[3][64],rect2[2][10],rcetscorenoire,rectscoreblanc;
         SDL_GetWindowSize(win,&(rectMain.w),&(rectMain.h));
         makerect(&rectMain,0,0,rectMain.w,rectMain.h);
       
         makerect(&rectTabe,rectMain.x+rectMain.w*0.4,rectMain.y+rectMain.h*0.15,rectMain.w*widthtab_surwidthwin,rectMain.h*heighthtab_surheighthwin);
-
+        
+        int btn_x=rectMain.x+rectMain.w*0.5-rectMain.w*0.1;
         // fin
         // prepartion de renderer 
-       
+        // le coix de joueur
+        if(win1)
+        {
         SDL_RenderClear(renderer);
-        
         SDL_RenderCopy(renderer,TexMain,NULL,&rectMain);
-        SDL_RenderCopy(renderer,Textab,NULL,&rectTabe);
-        renderer=changerlatableaux(T,renderer,textBlanc,textNoire,textPoint,K,nb,rectTabe,rectjeu,1); 
+        
+        
+        makerect(&rectVSOrdiN1,btn_x,rectMain.y+rectMain.h*0.075+rectMain.h*0.05,rectMain.w*0.2,rectMain.h*0.15);
+        SDL_RenderCopy(renderer,textfacile,NULL,&rectVSOrdiN1);
+
+        makerect(&rectVSOrdiN2,btn_x,rectVSOrdiN1.y+rectMain.h*0.17,rectMain.w*0.2,rectMain.h*0.15);
+        SDL_RenderCopy(renderer,textmoyen,NULL,&rectVSOrdiN2);
+      
+        makerect(&rectVSOrdiN3,btn_x,rectVSOrdiN2.y+rectMain.h*0.17,rectMain.w*0.2,rectMain.h*0.15);
+        SDL_RenderCopy(renderer,textdifficle,NULL,&rectVSOrdiN3);
+       
+        makerect(&rectVSjoueur,btn_x,rectVSOrdiN3.y+rectMain.h*0.17,rectMain.w*0.2,rectMain.h*0.15);
+        SDL_RenderCopy(renderer,text2joueur,NULL,&rectVSjoueur);
+
+
+
+        SDL_RenderPresent(renderer);
+        }
+        //fin
+       
+        // le coix de color
+       if(win2)
+       {
+        SDL_RenderClear(renderer);
+         
+        SDL_RenderCopy(renderer,TexMain,NULL,&rectMain);
+        makerect(&rectBlanc,btn_x,rectMain.y+rectMain.h*0.075+rectMain.h*0.25,rectMain.w*0.2,rectMain.h*0.15);
+        SDL_RenderCopy(renderer,textcolorblanc,NULL,&rectBlanc);
+        makerect(&rectNoire,btn_x,rectBlanc.y+rectMain.h*0.17,rectMain.w*0.2,rectMain.h*0.15);
+        SDL_RenderCopy(renderer,textcolornoire,NULL,&rectNoire);
         SDL_RenderPresent(renderer);
 
-        //fin
-        //fin
+       
+    
+       }
+       
+        // fin
+
+        // 
+        
+        if(win3)
+        {
+            if(nivaux==-1) Boll=1;
+
+        SDL_RenderClear(renderer);
+        SDL_RenderCopy(renderer,TexMain,NULL,&rectMain);
+        SDL_RenderCopy(renderer,Textab,NULL,&rectTabe);
+        
+        makerect(&rectRecm,rectMain.x+rectMain.w*0.01,rectMain.y+rectMain.h*0.01,rectMain.w*0.1,rectMain.h*0.13);
+        SDL_RenderCopy(renderer,textrecm,NULL,&rectRecm);
+       
+        makerect(&rectAffichierMove,rectRecm.x +rectRecm.w+rectMain.w*0.01 ,rectRecm.y,rectMain.w*0.1,rectMain.h*0.13);
+        SDL_RenderCopy(renderer,textmove,NULL,&rectAffichierMove);
+        
+        makerect(&rectTOPE10,rectAffichierMove.x +rectAffichierMove.w+rectMain.w*0.01 ,rectRecm.y,rectMain.w*0.1,rectMain.h*0.13);
+        SDL_RenderCopy(renderer,text10top,NULL,&rectTOPE10);
+       
+        makerect(&rectlistemovem,rectRecm.x,rectRecm.y+rectRecm.h+ rectMain.h*0.01,rectMain.w-rectTabe.w-rectMain.w*0.2,rectMain.h*0.75);
+        SDL_RenderCopy(renderer,textliste,NULL,&rectlistemovem);
+
+
+        renderer=changerlatableaux(T,renderer,textBlanc,textNoire,textPoint,K,nb,rectTabe,rectjeu,Boll); 
+       
+        SDL_RenderPresent(renderer);
+        }
+
+      
+        if(round==Adversaire(pi))
+        {
+
+                                
+          SDL_Delay(500);                       
+        jeualeatoire(T,K,&nb,Adversaire(pi)),Boll=1;
+
+        round=Adversaire(round);
+        }
         SDL_Event event;
         
         while (SDL_PollEvent(&event))
         {
-            
             switch (event.type)
             {
 
@@ -330,11 +415,86 @@ int main(int argc, char* argv[])
                 case SDL_MOUSEBUTTONDOWN:
                 
                     if(event.button.button==SDL_BUTTON_LEFT){
-                        faitevnt=1;
-                    if(SDL_GetCaseclick(rectTabe,event.button.x,event.button.y,&x,&y)) jeu(T,K,&nb,blanc,x,y);
-                    else jeualeatoire(T,K,&nb,noire);//; jeuAI(T,K,&nb,noire,8,K2)
+                        
+                        
+                       if(win3)
+                        {
+                            
+                            if(nivaux==-1)
+                            {
+                                if(round==pi)
+                                {
+                                    if(SDL_GetCaseclick(rectTabe,event.button.x,event.button.y,&x,&y)) jeu(T,K,&nb,pi,x,y);
+                                
+                                }
+                                else 
+                                {
+                                    if(SDL_GetCaseclick(rectTabe,event.button.x,event.button.y,&x,&y)) jeu(T,K,&nb,Adversaire(pi),x,y);
+                                
+                                }
+                                round=Adversaire(round);
+
+                            }
+                            if(nivaux==1)
+                            {
+                                printf("aa");
+                                if(round==pi)
+                                {
+                                if(SDL_GetCaseclick(rectTabe,event.button.x,event.button.y,&x,&y)) jeu(T,K,&nb,pi,x,y),Boll=0;
+                                }
+                            round=Adversaire(round);
+                            }
+                            //  if(SDL_GetCaseclick(rectTabe,event.button.x,event.button.y,&x,&y)) jeu(T,K,&nb,blanc,x,y);
+                    // else jeuAI(T,K,&nb,noire,8,K2);//jeualeatoire(T,K,&nb,noire);
+                        }
+                    
+                      
+                        if(win2)
+                        {
+                        if(SDL_click(rectBlanc,event)) pi=blanc;
+                        if(SDL_click(rectNoire,event)) pi=noire;
+                        
+                        if(pi!=vide) win1=0,win2=0,win3=1;
+                        } 
+                        if(win1){
+                        if(SDL_click(rectVSjoueur,event)) nivaux=-1;
+                        if(SDL_click(rectVSOrdiN1,event)) nivaux=1;
+                        if(SDL_click(rectVSOrdiN2,event)) nivaux=2;
+                        if(SDL_click(rectVSOrdiN3,event)) nivaux=3;
+                        // if(nivaux==1)
+                        // {
+                        //     if(pi==round)
+                        //     { 
+                        //         Boll=1;
+                        //     }
+                        //     else  jeualeatoire(T,K,&nb,Adversaire(pi)), Boll=0;
+                    
+                        // }
+                        if(nivaux!=0) {win1=0;win2=1;win3=0;}
+                        }
                     }
 
+                    break;
+                     
+                case  SDL_MOUSEBUTTONUP:
+                
+                    if(event.button.button==SDL_BUTTON_LEFT)
+                    {
+                           
+                       if(win3)
+                       {
+                            if(nivaux==1)
+                            {
+                              
+                                printf("bbaacc\n");
+                               
+                            }
+
+                       }
+                    
+                            
+                     
+                    }
                     break;
                 case SDL_QUIT:
                     done=SDL_TRUE;
