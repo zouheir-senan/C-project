@@ -9,6 +9,8 @@
 #include<time.h>
 #define widthtab_surwidthwin 0.53
 #define heighthtab_surheighthwin 0.841099163
+#define N2 3
+#define N3 5
 typedef struct jeuSDL
 {
     color joueur;
@@ -394,16 +396,42 @@ int main(int argc, char* argv[])
         SDL_RenderPresent(renderer);
         }
 
-      
+    if(nivaux==1)
+    {
         if(round==Adversaire(pi))
         {
 
                                 
           SDL_Delay(500);                       
-        jeualeatoire(T,K,&nb,Adversaire(pi)),Boll=1;
+        jeualeatoire(T,K,&nb,Adversaire(pi)) ,Boll=1;// jeuAI(T,K,&nb,Adversaire(pi),5,K2)
 
         round=Adversaire(round);
         }
+    }
+      if(nivaux==2)
+    {
+        if(round==Adversaire(pi))
+        {
+
+                                
+        SDL_Delay(500);                       
+        jeuAI(T,K,&nb,Adversaire(pi),N2,K2) ,Boll=1;//
+
+        round=Adversaire(round);
+        }
+    }
+      if(nivaux==3)
+    {
+        if(round==Adversaire(pi))
+        {
+
+                                
+        SDL_Delay(500);                       
+        jeuAI(T,K,&nb,Adversaire(pi),N3,K2) ,Boll=1;//
+
+        round=Adversaire(round);
+        }
+    }
         SDL_Event event;
         
         while (SDL_PollEvent(&event))
@@ -435,12 +463,13 @@ int main(int argc, char* argv[])
                                 round=Adversaire(round);
 
                             }
-                            if(nivaux==1)
+                            if(nivaux!=-1)
                             {
-                                printf("aa");
+                                
                                 if(round==pi)
                                 {
                                 if(SDL_GetCaseclick(rectTabe,event.button.x,event.button.y,&x,&y)) jeu(T,K,&nb,pi,x,y),Boll=0;
+                                // jeu(T,K,&nb,pi,x,y),Boll=0;
                                 }
                             round=Adversaire(round);
                             }

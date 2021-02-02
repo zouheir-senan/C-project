@@ -647,6 +647,6 @@ int jeu(color T[][8],int K[2][25],int *nb,color pi,int x,int y)
 
 color Adversaire(color pi){
     if(pi==noire) return blanc;
-    if(pi==blanc) return noire;
+   return noire;
 
 }
