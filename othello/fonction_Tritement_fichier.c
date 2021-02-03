@@ -212,7 +212,10 @@ fclose(flot);
 
 
 cle=hash(crypto(password));
-A=ccrerJoueur(nom,0,cle);
+int a;
+srand(time(NULL));
+a=rand();
+A=ccrerJoueur(nom,a,cle);
 
 flot=fopen("dataDeJoueur.dat","ab");
 if(!flot){

@@ -5,6 +5,7 @@
     #include <string.h>
     #include <conio.h>
     #include <math.h>
+    #include <time.h>
     #define Jeu "jeusauvgarde/Jeu.dat"
 
     #define JOUEURS "dataDeJoueur.dat"

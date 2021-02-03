@@ -207,10 +207,11 @@ return n;
 
 int main(int argc, char* argv[])
 {
+    
     SDL_Window *win = NULL;
     SDL_Renderer *renderer = NULL;
     int posX = SDL_WINDOWPOS_CENTERED, posY = SDL_WINDOWPOS_CENTERED, width = 1020, height = 600;
-    int machine=0,deujoueur=0,joueur1,joueur2,recm=0,bloq1=0,bloq=0,afficheTop=0,affichemove=0,nivaux=0,win1=1,win2=0,win3=0,Boll=1;
+    int d=1;
     // intiSDL
     if(SDL_Init(SDL_INIT_VIDEO)!=0) SDL_ExitWithError("Initialisation",NULL,NULL);
     // win
@@ -283,15 +284,22 @@ int main(int argc, char* argv[])
     SDL_FreeSurface(Point);
 
     // fin
-    SDL_bool done = SDL_FALSE;
-    int faitevnt=1;
+      
+     
+     SDL_bool done = SDL_FALSE;
+  
      //jeu formatiom
 
 
 
 
         color T[8][8];
-        init_TabAvide(T);
+
+       
+  int machine=0,deujoueur=0,joueur1,joueur2,recm=0,bloq1=0,bloq=0,afficheTop=0,affichemove=0,nivaux=0,win1=1,win2=0,win3=0,Boll=1;
+   init:  
+     init_TabAvide(T);
+     machine=0,deujoueur=0,joueur1,joueur2,recm=0,bloq1=0,bloq=0,afficheTop=0,affichemove=0,nivaux=0,win1=1,win2=0,win3=0,Boll=1;
         
         recomencer(T);
  
@@ -310,13 +318,19 @@ int main(int argc, char* argv[])
        else round=blanc;
         remplissage(K,T,round,&nb);
         printf("%d\n",n);
+
         //fin
+        TTF_Init();
+        TTF_Font *USER;
+        SDL_Color color_write={0,0,0};
+        USER=TTF_OpenFont("font.ttf",15);
+
     while (!done)
     {
 
        
         // rectangle
-        SDL_Rect rectMain,rectTabe,rectjeu[8][8],rectVSjoueur,rectVSOrdiN1,rectVSOrdiN2,rectVSOrdiN3,rectBlanc,rectNoire,rectRecm,rectAffichierMove,rectTOPE10,rectlistemovem,rect1[3][64],rect2[2][10],rcetscorenoire,rectscoreblanc;
+        SDL_Rect rectMain,rectTabe,rectjeu[8][8],rectVSjoueur,rectVSOrdiN1,rectVSOrdiN2,rectVSOrdiN3,rectBlanc,rectNoire,rectRecm,rectAffichierMove,rectTOPE10,rectlistemovem,rect1[64],rect2[10],rcetscorenoire,rectscoreblanc;
         SDL_GetWindowSize(win,&(rectMain.w),&(rectMain.h));
         makerect(&rectMain,0,0,rectMain.w,rectMain.h);
       
@@ -386,10 +400,90 @@ int main(int argc, char* argv[])
         
         makerect(&rectTOPE10,rectAffichierMove.x +rectAffichierMove.w+rectMain.w*0.01 ,rectRecm.y,rectMain.w*0.1,rectMain.h*0.13);
         SDL_RenderCopy(renderer,text10top,NULL,&rectTOPE10);
-       
+      if(affichemove||afficheTop)
+        {
         makerect(&rectlistemovem,rectRecm.x,rectRecm.y+rectRecm.h+ rectMain.h*0.01,rectMain.w-rectTabe.w-rectMain.w*0.2,rectMain.h*0.75);
         SDL_RenderCopy(renderer,textliste,NULL,&rectlistemovem);
+            if(afficheTop)
+                { 
+                    joueur *D;
+                    D=DixMeilleursScores();
+                    int a,b;
+                    a=rectlistemovem.h;
+                    b=rectlistemovem.w;
+                    
+                    a/=22;
+                    b*=0.5;
+                    int x_lis=rectlistemovem.x+rectlistemovem.w*0.05;
+                    int y_lis=rectlistemovem.y +rectlistemovem.h*0.05;
+                    SDL_Surface *S_text;
+                    SDL_Texture *T_text;
+                   
+                    char text[301]={""},S_j[10];
+                    
+                   
+                    for(int i=0;i<261;i+=30)
+                    {
+                    itoa((D[i/30].score),S_j,8);
+                    // strcat(text,"");
+                    strcat(text,D[i/30].usrname);
+                    char split[12]={"  :"};
+                    strcat(split,S_j);
+                   
+                   
+                    
+                    strcat(text,split); 
+                    int Lenght_T=(i+30)-strlen(text);
+                    char temp[Lenght_T+1];
+                     for(int j=0;j<Lenght_T;j++) temp[j]=' ';
+               
+                     strcat(text,temp);
+                     puts(text);
 
+
+                    }
+                    puts(text);
+                   
+                    int T_w;
+                    int T_h;
+                   
+               
+                    // strcat(text,"  : ");
+                    // strcat(text,S_j);
+                    // strcat(text,"\t");
+                    // strcat(text,"yahya");
+                    // int n_t=strlen(text)/2;
+                    // printf("%d\n",n_t);
+                  
+                   
+                    
+                    S_text=TTF_RenderText_Blended_Wrapped(USER,text,color_write,271);//TTF_RenderText_Solid(USER,text,color_write);
+                    T_text=SDL_CreateTextureFromSurface(renderer,S_text);
+                    SDL_QueryTexture(T_text,NULL,NULL,&T_w,&T_h);
+                    makerect(&(rect2[0]),x_lis,y_lis,T_w,T_h);
+                    SDL_RenderCopy(renderer,T_text,NULL,&rect2[0]);
+
+                    
+                    // for(int i=1;i<10;i++)
+                    // {
+                    // makerect(&(rect2[i]),x_lis,rect2[i-1].y+a*1.4,b,a);
+                    // char text[100]={""},S_j[20];
+                    // itoa((D[i].score),S_j,10);
+                    // strcpy(text,D[i].usrname);
+                    // strcat(text,"  : ");
+                    // strcat(text,S_j);
+                    // S_text=TTF_RenderText_Solid(USER,text,color_write);
+                    // T_text=SDL_CreateTextureFromSurface(renderer,S_text);
+                    // SDL_RenderCopy(renderer,T_text,NULL,&rect2[i]);
+                    
+                    // }
+                    free(D);
+
+                }
+
+
+        } 
+            
 
         renderer=changerlatableaux(T,renderer,textBlanc,textNoire,textPoint,K,nb,rectTabe,rectjeu,Boll); 
        
@@ -447,31 +541,54 @@ int main(int argc, char* argv[])
                         
                        if(win3)
                         {
-                            
-                            if(nivaux==-1)
-                            {
-                                if(round==pi)
-                                {
-                                    if(SDL_GetCaseclick(rectTabe,event.button.x,event.button.y,&x,&y)) jeu(T,K,&nb,pi,x,y);
-                                
-                                }
-                                else 
-                                {
-                                    if(SDL_GetCaseclick(rectTabe,event.button.x,event.button.y,&x,&y)) jeu(T,K,&nb,Adversaire(pi),x,y);
-                                
-                                }
-                                round=Adversaire(round);
+                        if(SDL_click(rectTOPE10,event))
+                        { 
+                        afficheTop=1;
+                        affichemove=0;
+                        
+                        }
+                         if(SDL_click(rectAffichierMove,event))
+                        { 
+                        afficheTop=0;
+                        affichemove=1;
 
-                            }
-                            if(nivaux!=-1)
-                            {
-                                
-                                if(round==pi)
+                        }
+                        if(SDL_click(rectRecm,event))
+                        { 
+                            // recomencer(T);
+                            goto init;
+                        }
+                            
+
+
+
+                           if(SDL_click(rectTabe,event)){ 
+                            
+                                if(nivaux==-1)
                                 {
-                                if(SDL_GetCaseclick(rectTabe,event.button.x,event.button.y,&x,&y)) jeu(T,K,&nb,pi,x,y),Boll=0;
-                                // jeu(T,K,&nb,pi,x,y),Boll=0;
+                                    if(round==pi)
+                                    {
+                                        if(SDL_GetCaseclick(rectTabe,event.button.x,event.button.y,&x,&y)) jeu(T,K,&nb,pi,x,y);
+                                    
+                                    }
+                                    else 
+                                    {
+                                        if(SDL_GetCaseclick(rectTabe,event.button.x,event.button.y,&x,&y)) jeu(T,K,&nb,Adversaire(pi),x,y);
+                                    
+                                    }
+                                    round=Adversaire(round);
+
                                 }
-                            round=Adversaire(round);
+                                if(nivaux!=-1)
+                                {
+                                    
+                                    if(round==pi)
+                                    {
+                                    if(SDL_GetCaseclick(rectTabe,event.button.x,event.button.y,&x,&y)) jeu(T,K,&nb,pi,x,y),Boll=0;
+                                    // jeu(T,K,&nb,pi,x,y),Boll=0;
+                                    }
+                                    round=Adversaire(round);
+                                }
                             }
                             //  if(SDL_GetCaseclick(rectTabe,event.button.x,event.button.y,&x,&y)) jeu(T,K,&nb,blanc,x,y);
                     // else jeuAI(T,K,&nb,noire,8,K2);//jeualeatoire(T,K,&nb,noire);
@@ -539,7 +656,7 @@ int main(int argc, char* argv[])
         }
 
     }
-
+    TTF_Quit();
     SDL_DestroyTexture(textPoint);
     SDL_DestroyTexture(textBlanc);
     SDL_DestroyTexture(textNoire);
