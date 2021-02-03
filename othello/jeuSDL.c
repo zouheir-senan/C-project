@@ -324,11 +324,11 @@ int main(int argc, char* argv[])
         color C[8][8];
 
        
-  int machine=0,deujoueur=0,joueur1,joueur2,recm=0,bloq1=0,bloq=0,afficheTop=0,affichemove=0,nivaux=0,win1=1,win2=0,win3=0,Boll=1,actuliseTOP=1,actulisemove=1;
+  int machine=0,deujoueur=0,joueur1,joueur2,recm=0,bloq1=0,bloq=0,afficheTop=0,affichemove=0,nivaux=0,win1=1,win2=0,win3=0,Boll=1,actuliseTOP=0,actulisemove=0;
    init:  
      init_TabAvide(T);
      init_TabAvide(C);
-     machine=0,deujoueur=0,joueur1,joueur2,recm=0,bloq1=0,bloq=0,afficheTop=0,affichemove=0,nivaux=0,win1=1,win2=0,win3=0,Boll=1,actuliseTOP=1,actulisemove=1;
+     machine=0,deujoueur=0,joueur1,joueur2,recm=0,bloq1=0,bloq=0,afficheTop=0,affichemove=0,nivaux=0,win1=1,win2=0,win3=0,Boll=1,actuliseTOP=0,actulisemove=0;
         
         recomencer(T);
  
@@ -337,7 +337,7 @@ int main(int argc, char* argv[])
         int nb=9;
         int score;
         int x,y;
-
+        pile.nbr=-1;
        color pi=vide,round=vide;
        
         srand(time(NULL));
@@ -501,17 +501,17 @@ int main(int argc, char* argv[])
                     int y_lis=rectlistemovem.y +rectlistemovem.h*0.05;
                    
                    
-                    char text1[64*30+1]={""},S_x[10],S_y[10];
+                    char text1[64*15+1]={""},S_x[10],S_y[10];
                     
                    
-                    for(int i=0;i<=((pile.nbr-1)*30);i+=30)
+                    for(int i=0;i<=((pile.nbr-1)*15);i+=15)
                     {
                     
                     // strcat(text,"");
-                    itoa(pile.toutMove[i/30].x,S_x,8);
-                    itoa(pile.toutMove[i/30].y,S_y,8);
-                   if(pile.toutMove[i/30].joueur==blanc) strcat(text1,"Blanc (");
-                   if(pile.toutMove[i/30].joueur==noire) strcat(text1,"noire (");
+                    itoa(pile.toutMove[i/15].x,S_x,8);
+                    itoa(pile.toutMove[i/15].y,S_y,8);
+                   if(pile.toutMove[i/15].joueur==blanc) strcat(text1,"Blanc (");
+                   if(pile.toutMove[i/15].joueur==noire) strcat(text1,"noire (");
                     char split[12]={":"};
                     strcat(split,S_y);
                    
@@ -523,7 +523,7 @@ int main(int argc, char* argv[])
                     strcat(text1,")");
 
 
-                    int Lenght_T=(i+30)-strlen(text1);
+                    int Lenght_T=(i+15)-strlen(text1);
                     char temp[Lenght_T+1];
                     for(int j=0;j<Lenght_T;j++) temp[j]=' ';
                
@@ -540,7 +540,7 @@ int main(int argc, char* argv[])
                     T_text=SDL_CreateTextureFromSurface(renderer,S_text);
                     SDL_QueryTexture(T_text,NULL,NULL,&T_w,&T_h);
                     makerect(&(rect),x_lis,y_lis,T_w,T_h);
-                    actulisemove=0;
+                    actulisemove=0;actuliseTOP=0;
                     SDL_FreeSurface(S_text);
             
                     
@@ -620,7 +620,7 @@ int main(int argc, char* argv[])
                         { 
                         afficheTop=1;
                         affichemove=0;
-                        
+                        actuliseTOP=1;
                         }
                          if(SDL_click(rectAffichierMove,event))
                         { 
