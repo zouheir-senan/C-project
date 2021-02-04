@@ -418,7 +418,7 @@ int alphabeta(int depth,int etatAI,color COPIE[8][8],color pi,int K[2][25],int a
     
     
     
-    printf("hzllo\n");
+   
     
     int value=10;
     int nb;
@@ -429,7 +429,7 @@ int alphabeta(int depth,int etatAI,color COPIE[8][8],color pi,int K[2][25],int a
     {
         
         
-        printf("%d i:\n",calculnum(COPIE,noire));
+       
         return calculnum(COPIE,noire);
 
         
@@ -463,35 +463,11 @@ int alphabeta(int depth,int etatAI,color COPIE[8][8],color pi,int K[2][25],int a
 
                 
                 transformerpierre(COPIE,K[0][i],K[1][i],pi);
-                for(int m=0;m<8;m++)
-                {
-                for(int j=0;j<8;j++)
-                {
-                    if(COPIE[j][7-m]==blanc)
-                    {
-                       printf("%c\t",'B');
-                    }
-                   if(COPIE[j][7-m]==pi)
-                   {
-                       printf("%c\t",'N');
-                   }
-                   if((COPIE[j][7-m]!=pi)&&(COPIE[j][7-m]!=blanc))
-                   {
-                       printf("*\t");
-                   }
-                   
-                }
-                
 
-               
-                printf("\n");
-                }
                 
                 
                 value=max1(value,alphabeta(depth-1,0,COPIE,pi,K,alpha,beta));
-                printf("value1:%d\n",value);
-                printf("depth:%d\n",depth);
-                
+
                 if(value>=beta) 
                 {
                     return value;
@@ -534,32 +510,10 @@ int alphabeta(int depth,int etatAI,color COPIE[8][8],color pi,int K[2][25],int a
                 }
                 
                 transformerpierre(COPIE,K[0][i],K[1][i],pi);
-                for(int m=0;m<8;m++)
-                {
-                for(int j=0;j<8;j++)
-                {
-                    if(COPIE[j][7-m]==pi)
-                    {
-                       printf("%c\t",'B');
-                    }
-                    if(COPIE[j][7-m]==noire)
-                    {
-                       printf("%c\t",'N');
-                    }
-                    if((COPIE[j][7-m]!=pi)&&(COPIE[j][7-m]!=noire))
-                    {
-                       printf("*\t");
-                    }
-                   
-                }
 
-               
-                printf("\n");
-                }
                 
                 value=min1(value,alphabeta(depth-1,1,COPIE,pi,K,alpha,beta));
-                printf("value1:%d\n",value);
-                printf("depth:%d\n",depth);
+               
                 
                 
                 if(alpha>=value)
