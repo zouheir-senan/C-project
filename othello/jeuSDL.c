@@ -10,7 +10,7 @@
 #define widthtab_surwidthwin 0.53
 #define heighthtab_surheighthwin 0.841099163
 #define N2 3
-#define N3 5
+#define N3 4
 typedef struct jeuSDL
 {
     color joueur;
@@ -345,7 +345,7 @@ int main(int argc, char* argv[])
         int K2[2]={-1,-1};
         int nb=9;
         int scoreb=2,scoren=2,scoreb_tmp=2,scoren_tmp=2;
-        scoren=Score(T,noire);;
+       
         int x,y;
         pile.nbr=-1;
        color pi=vide,round=vide;
@@ -460,9 +460,13 @@ int main(int argc, char* argv[])
         if(update_score)
         {
            
-            char S_B[10],S_N[10];
-            itoa(scoreb,S_B,8);
-            itoa(scoren,S_N,8);
+            char S_B[14],S_N[14];
+            printf("%d\n",scoreb);
+            itoa(scoreb,S_B,10);
+            puts(S_B);
+            itoa(scoren,S_N,10);
+            printf("%d\n",scoren);
+            puts(S_N);
             S_ScoreB=TTF_RenderText_Solid(font_S,S_B,color_g);
             T_ScoreB= SDL_CreateTextureFromSurface(renderer,S_ScoreB);
             S_ScoreN=TTF_RenderText_Solid(font_S,S_N,color_g);
@@ -474,6 +478,8 @@ int main(int argc, char* argv[])
             SDL_FreeSurface(S_ScoreB);
             update_score=0;
         }
+        scoreb=Score(T,blanc);
+        scoren=Score(T,noire);
  int h1,w1;
          if(pi==noire)
             { 
@@ -665,7 +671,7 @@ int main(int argc, char* argv[])
         {
 
         Copiejeu(C,T);                          
-        SDL_Delay(500);                       
+        // SDL_Delay(500);                       
         jeuAI(T,K,&nb,Adversaire(pi),N2,K2) ,Boll=1;//
          if(!GitXetYdejeu(&x,&y,C,T))
             {
@@ -690,7 +696,7 @@ int main(int argc, char* argv[])
         {
 
                                 
-        SDL_Delay(500);
+        // SDL_Delay(500);
         Copiejeu(C,T);                      
         jeuAI(T,K,&nb,Adversaire(pi),N3,K2) ,Boll=1;//
         if(!GitXetYdejeu(&x,&y,C,T))
@@ -877,8 +883,7 @@ int main(int argc, char* argv[])
 
 
         }
-        scoreb=Score(T,blanc);
-        scoren=Score(T,noire);
+       
         if((scoren!=scoren_tmp)||(scoreb!=scoreb_tmp)) update_score=1;
         
 

@@ -1,6 +1,12 @@
-#include"logique_jeu.h"
-#include"fonction_Tritement_fichier.h"
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define INFINIE INT_MAX
+typedef enum color color;//couleur
+enum color
+{
+    noire,blanc,vide
+};
 int min1(int a,int b)
 {
   if (a>b) return b;
@@ -11,6 +17,61 @@ int max1(int a,int b)
   if (a>b) return a;
   else return b;
 }
+
+int **init_tab_dynamic(int x,int y)
+{
+   int i=0,j=0;
+   int **tab=(int**)malloc(x*sizeof(int*));
+   if(tab!=NULL)
+   {
+   for (i=0;i<x;i++)
+   {
+      tab[i]=(int*)malloc(y*sizeof(int));
+      for (j=0;j<y;j++)
+      {
+          tab[i][j]=-1;
+      }
+   }
+   free(tab);
+   }
+   else
+   {
+       printf("erreur");
+       exit(-1);
+   }
+   
+   return tab;
+}
+color **char_tab_dynamic(int x,int y)
+{
+
+    int i=0,j=0;
+    color **tab=malloc(x*sizeof(color*));
+    if(tab!=NULL)
+    {
+    for (i=0;i<x;i++)
+    {
+        tab[i]=(color*)malloc(y*sizeof(color));
+        for (j=0;j<y;j++)
+        {
+            tab[i][j]=vide;
+
+        }
+    }
+    free(tab);
+    }
+    else
+    {
+        printf("erreur");
+        exit(-1);
+    }
+    
+    return tab;
+}
+
+
+
+
 
 void couleur()
 {
@@ -58,7 +119,7 @@ void remplissage(int K[2][25],color T[8][8],color pi,int *nb)
                         }
                         if((T[m][j]!=pi)&&(m<8))
                         {
-                           
+                            printf("(%d,%d) est une case valable\n",m,j);
                             K[0][b]=m;
                             K[1][b]=j;
                             b++;
@@ -79,6 +140,7 @@ void remplissage(int K[2][25],color T[8][8],color pi,int *nb)
                         }
                         if((T[m][n]!=pi)&&(m<8)&&(n<8))
                         {
+                            printf("(%d,%d) est une case valable\n",m,n);
                             K[0][b]=m;
                             K[1][b]=n;
                             b++;
@@ -98,6 +160,7 @@ void remplissage(int K[2][25],color T[8][8],color pi,int *nb)
                         }
                         if((T[i][n]!=pi)&&(n<8))
                         {
+                            printf("(%d,%d) est une case valable\n",i,n);
                             K[0][b]=i;
                             K[1][b]=n;
                             b++;
@@ -118,6 +181,7 @@ void remplissage(int K[2][25],color T[8][8],color pi,int *nb)
                         }
                         if((T[m][n]!=pi)&&(m<8)&&(n>=0))
                         {
+                            printf("(%d,%d) est une case valable\n",m,n);
                             K[0][b]=m;
                             K[1][b]=n;
                             b++;
@@ -136,7 +200,7 @@ void remplissage(int K[2][25],color T[8][8],color pi,int *nb)
                         }
                         if((T[i][n]!=pi)&&(n>=0))
                         {
-                            
+                            printf("(%d,%d) est une case valable\n",i,n);
                             K[0][b]=i;
                             K[1][b]=n;
                             b++;
@@ -156,7 +220,7 @@ void remplissage(int K[2][25],color T[8][8],color pi,int *nb)
                         }
                         if((T[m][j]!=pi)&&(m>=0))
                         {
-                           
+                            printf("(%d,%d) est une case valable\n",m,j);
                             K[0][b]=m;
                             K[1][b]=j;
                             b++;
@@ -178,7 +242,7 @@ void remplissage(int K[2][25],color T[8][8],color pi,int *nb)
                         }
                         if((T[m][n]!=pi)&&(m>=0)&&(n<8))
                         {
-                
+                            printf("(%d,%d) est une case valable\n",m,n);
                             K[0][b]=m;
                             K[1][b]=n;
                             b++;
@@ -200,7 +264,7 @@ void remplissage(int K[2][25],color T[8][8],color pi,int *nb)
                         }
                         if((T[m][n]!=pi)&&(m>=0)&&(n>=0))
                         {
-                           
+                            printf("(%d,%d) est une case valable\n",m,n);
                             K[0][b]=m;
                             K[1][b]=n;
                             b++;
@@ -412,7 +476,6 @@ fonction alphabeta(nœud, α, β)  α est toujours inférieur à β
     retourner v*/
 
 
-
 int alphabeta(int depth,int etatAI,color COPIE[8][8],color pi,int K[2][25],int alpha,int beta)
 {
     
@@ -619,27 +682,9 @@ void testvalue(int nb,int K[2][25],int value,int depth,color COPIE[8][8],color p
 
 }
 
-int testcase(int K[][25],int nb,int x,int y)
+int main()
 {
-       int n=0,i, j; 
-for(j=0;j<25;j++)
-{
-    if(K[0][j]==x)
-    {
-        if(K[1][j]==y)
-        {
-            n=1;
-            return 1;
-        }
-    }
-}
-return 0;
-}
-
-void jeuAI(color T[][8],int K[2][25],int *nb,color pi,int depth,int K2[2])
-{
-    
-   
+    int K2[2];
     int r;
     int x1=0;
     int x2=0;
@@ -649,10 +694,74 @@ void jeuAI(color T[][8],int K[2][25],int *nb,color pi,int depth,int K2[2])
     color COPIE[8][8];
     int h=0;
     int k=0;
+    int nb;
+    color T[8][8];
+    int K[2][25];
     char co1;
     char co2;
     int i=0,j=0,n=0;
-    color c=blanc;// sss
+    int x=0,y=0;
+    for(i=0;i<8;i++)
+    {
+        for(j=0;j<8;j++)
+        {
+            T[i][j]=vide;
+        }
+    }
+
+    T[3][3]=blanc;
+    T[4][3]=noire;
+    T[3][4]=noire;
+    T[4][4]=blanc;
+    /*T[4][5]=blanc;
+    T[5][5]=noire;
+    T[5][6]=noire;*/
+    
+    r=calculnum(T,noire);
+    printf("%d\n",r);
+    
+    
+    color c=vide;
+    color pi=vide;
+    char s1[30];
+    char c1;
+    printf("j/J:jouer\n");
+    scanf("%c",&c1);
+    
+    if((c1=='j')||(c1=='J'))
+    {
+        couleur();
+        scanf("%s",s1);
+        do{
+            
+            n=0;
+            nb=0;
+            
+            if(strcmp(s1,"joueur2")==0)
+            {
+                
+                c=noire;
+                pi=blanc;
+                co1='B';
+                co2='N';
+            }
+            
+            if(strcmp(s1,"joueur1")==0)
+            {
+                
+                c=blanc;
+                pi=noire;
+                co1='N';
+                co2='B'; 
+            }
+            remplissage(K,T,pi,&nb);
+            printf("----------------------\n");
+            
+            if(pi==noire)
+            {
+            max2=0;
+            
+            
             for(int g=0;g<8;g++)
             {
                 for(int j=0;j<8;j++)
@@ -660,51 +769,161 @@ void jeuAI(color T[][8],int K[2][25],int *nb,color pi,int depth,int K2[2])
                     COPIE[g][j]=T[g][j];
                 }
             }
-            for(int g=0;g<*nb;g++)
+            for(int g=0;g<25;g++)
             {
                 K1[0][g]=K[0][g];
                 K1[1][g]=K[1][g];
             }
-            value=alphabeta(depth,1,COPIE,pi,K1,-999,999);
-             for(int g=0;g<8;g++)
+
+
+            if(pi==noire)
             {
-                for(int j=0;j<8;j++)
+                value=alphabeta(4,1,COPIE,pi,K1,-999,999);
+                printf("value:%d\n",value);
+                K2[0]=-1;
+                K2[1]=-1;
+                for(int g=0;g<8;g++)
                 {
-                    COPIE[g][j]=T[g][j];
+                    for(int j=0;j<8;j++)
+                    {
+                        COPIE[g][j]=T[g][j];
+                    }
                 }
+                printf("+++++++++++++++++++++++++++++++++++++++++++++\n");
+                testvalue(nb,K,value,4,COPIE,pi,K2);
+                printf("%d,%d\n",K2[0],K2[1]);
+                printf("value:%d\n",value);
             }
-            testvalue(*nb,K,value,depth,COPIE,pi,K2);
-            printf("%d,%d\n",K2[0],K2[1]);
-            transformerpierre(T,K2[0],K2[1],pi);
-            remplissage(K,T,Adversaire(pi),nb);
+            
+            
 
-}
+            }
+            
+            
+            
+            
 
-void jeualeatoire(color T[][8],int K[2][25],int *nb,color pi)
-{
+        
+            
+            
+            if(nb!=0)
+            {
+            do
+            {
+                printf("donner x:\n");
+                scanf("%d",&x);
+                printf("donner y:\n");
+                scanf("%d",&y);
+                for(j=0;j<25;j++)
+                {
+                    if(K[0][j]==x)
+                    {
+                        if(K[1][j]==y)
+                        {
+                            n=1;
+                            break;
+                        }
+                    }
+                }
+            }while(n==0);
+            
+           for(i=0;i<8;i++)
+           {
+               for(j=0;j<8;j++)
+               {
+                   if(T[j][7-i]==c)
+                   {
+                       printf("%c\t",co2);
+                   }
+                   if(T[j][7-i]==pi)
+                   {
+                       printf("%c\t",co1);
+                   }
+                   if((T[j][7-i]!=pi)&&(T[j][7-i]!=c))
+                   {
+                       printf("-\t");
+                   }
+                   
+               }
+
+               
+               printf("\n");
+           }
+           printf("----------------------------------------------------------\n");
+
+           transformerpierre(T,x,y,pi);
+           for(i=0;i<8;i++)
+           {
+               for(j=0;j<8;j++)
+               {
+                   if(T[j][7-i]==c)
+                   {
+                       printf("%c\t",co2);
+                   }
+                   if(T[j][7-i]==pi)
+                   {
+                       printf("%c\t",co1);
+                   }
+                   if((T[j][7-i]!=pi)&&(T[j][7-i]!=c))
+                   {
+                       printf("*\t");
+                   }
+                   
+               }
+
+               
+               printf("\n");
+            }
+            }
+            
+            printf("nb:%d\n",nb);
+            if(strcmp("joueur1",s1)==0)
+            {
+                
+                strcpy(s1,"joueur2");
+            }
+            else
+            {
+                strcpy(s1,"joueur1");
+            }
+            printf("le role de %s\n",s1);
+            k=0;
+           for(i=0;i<8;i++)
+           {
+               for(j=0;j<8;j++)
+               {
+                   if((T[i][j]!=pi)&&(T[i][j]!=c))
+                   {
+                        k++;   
+                   }
+               }
+           }
+           if((h==0)&&(nb==0)) break;
+           h=nb;
+
+
+           
+
+
+        }while(k>0);
+
+
+
+
+           
+           
+           
+
+
+
+        
+        
+
+
+
+
+
+    }
     
-    srand(time(NULL));
-    int a=rand()%(*nb);
-    transformerpierre(T,K[0][a],K[1][a],pi);
-    remplissage(K,T,Adversaire(pi),nb);
-}
-
-int jeu(color T[][8],int K[2][25],int *nb,color pi,int x,int y)
-{
-    int a=0;
-    if(testcase(K,*nb,x,y)) 
-    {
-        transformerpierre(T,x,y,pi);
-        a=1;
-        remplissage(K,T,Adversaire(pi),nb);
-        }
-    return a;
-
-
-}
-
-color Adversaire(color pi){
-    if(pi==noire) return blanc;
-   return noire;
-
+    return 0;
 }

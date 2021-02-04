@@ -736,7 +736,7 @@ void jeuAI(color T[][8],int K[2][25],int *nb,color pi,int depth,int K2[2]){
 void jeualeatoire(color T[][8],int K[2][25],int *nb,color pi){
 remplissage(K,T,pi,&nb);
 srnad(time(NULL));
-int a=rand()%nb;
+int a=rand()%(*nb);
 transformerpierre(T,K[0][a],K[1][a],pi);
 }
 
