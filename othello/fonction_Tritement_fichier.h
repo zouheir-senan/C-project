@@ -34,9 +34,9 @@
   joueur ccrerJoueur(char *nom,int score,int cle);
   char *crypto(const char *password);
   int hash(const char *password);
-  void sauvgarde(color T[][8],joueur A);
+  void sauvgarde(color T[][8],joueur A,int niveau,color round);
   void init_TabAvide(color T[][8]);
   void recomencer(color T[][8]);
-  void charegerjeu(joueur A,color T[][8]);
+  void charegerjeu(joueur A,color T[][8],int *niveau,color *round);
    
 #endif // __FONCTION_TRITEMENT_FICHIER

@@ -265,7 +265,7 @@ return a;
 
 
 
-void sauvgarde(color T[][8],joueur A){
+void sauvgarde(color T[][8],joueur A,int niveau,color round){
 strcat(A.usrname,"jau.dat");  
 char N[100]="jeusauvgarde/";
 strcat(N,A.usrname);
@@ -283,10 +283,12 @@ for(i=0;i<8;i++){
     fwrite(&T[i][j],sizeof(T[i][j]),1,flot);
     }  
 }
+fwrite(&niveau,sizeof(niveau),1,flot);
+fwrite(&round,sizeof(round),1,flot);
 fclose(flot);
 }
 
-void charegerjeu(joueur A,color T[][8]){
+void charegerjeu(joueur A,color T[][8],int *niveau,color *round){
 strcat(A.usrname,"jau.dat");
 char N[100]="jeusauvgarde/";
 strcat(N,A.usrname);
@@ -315,7 +317,8 @@ for(i=0;i<8;i++){
     }  
 }
 
-
+fread(niveau,sizeof(*niveau),1,flot);
+fread(round,sizeof(*round),1,flot);
 fclose(flot);
 return ;
 }

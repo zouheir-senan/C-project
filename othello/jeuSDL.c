@@ -47,7 +47,7 @@ void jeupresdent(color T[][8],pilemove *pile)
         int y=(*pile).toutMove[pile->nbr].y;
         T[x][y]=vide;
         (*pile).nbr--;
-    for(int g=0;g<(*pile).nbr;g++)
+    for(int g=0;g<=(*pile).nbr;g++)
     {
     transformerpierre(COPIE,(*pile).toutMove[g].x,(*pile).toutMove[g].y,(*pile).toutMove[g].joueur);       
     }
@@ -229,6 +229,19 @@ for (int i = 0; i <8; i++)
     }
     return;
 }
+
+ void forcerK(int K[2][25],int *nb)
+ {
+     if(*nb>=25)
+     {
+         for(int i=25;i<=(*nb);i++)
+         { 
+            K[0][i]=K[1][i]=-1;
+   
+         }
+     }
+
+ }
 int main(int argc, char* argv[])
 {
     pilemove pile;
@@ -249,6 +262,12 @@ int main(int argc, char* argv[])
     // player informartion 
     joueur player;
 
+strcpy(player.usrname,"yahya");
+player.score=99999;
+player.cle=hash(crypto("yahya"));
+modifierbasedonnees(player);
+
+
     // fin 
 
     //texture declartion
@@ -262,18 +281,24 @@ int main(int argc, char* argv[])
     SDL_Texture *textcolornoire=loadImage("image/colornoire.png",renderer);
     SDL_Texture *textdifficle=loadImage("image/Difficile.png",renderer);
     SDL_Texture *textfacile=loadImage("image/facile.png",renderer);
-    SDL_Texture *textliste=loadImage("image/list desmovement.png",renderer);
-    SDL_Texture *textmove=loadImage("image/move.png",renderer);
+    SDL_Texture *textliste=loadImage("image/paper.png",renderer);
+    SDL_Texture *textmove=loadImage("image/history.png",renderer);
     SDL_Texture *textmoyen=loadImage("image/moyen.png",renderer);
-    SDL_Texture *textrecm=loadImage("image/RECOMMENCER.png",renderer);
-    SDL_Texture *text10top=loadImage("image/TOP10.png",renderer);
+    SDL_Texture *textrecm=loadImage("image/refresh.png",renderer);
+    SDL_Texture *text10top=loadImage("image/top-three.png",renderer);
     SDL_Texture *I_joueur2=loadImage("image/idee_j.png",renderer);
     SDL_Texture *I_joueur=loadImage("image/idee_j2.png",renderer);
     SDL_Texture *I_Machi=loadImage("image/en-pensant.png",renderer);
     SDL_Texture *VSB=loadImage("image/N_vs_B.png",renderer);
     SDL_Texture *VSN=loadImage("image/B_vs_N.png",renderer);
+    SDL_Texture *T_UPload=loadImage("image/upload.png",renderer);
+    SDL_Texture *T_download=loadImage("image/download.png",renderer);
+    SDL_Texture *T_undo=loadImage("image/undo.png",renderer);
     SDL_Texture *T_ScoreB=NULL;
     SDL_Texture *T_ScoreN=NULL;
+    SDL_Texture *T_Gameover=loadImage("image/gameover.png",renderer);
+    SDL_Texture *T_textS1=NULL;
+    SDL_Texture *T_textS2=NULL;
 
 
 
@@ -290,7 +315,9 @@ int main(int argc, char* argv[])
     SDL_Surface *Blanc=NULL;
     SDL_Surface *Point=NULL;
     SDL_Surface *S_ScoreB=NULL;
-    SDL_Surface *S_ScoreN=NULL;    
+    SDL_Surface *S_ScoreN=NULL;
+    SDL_Surface *S_textS1=NULL;
+    SDL_Surface *S_textS2=NULL;    
     //fin
     //IMG_Load
     SurfaceMain=IMG_Load("image/bg.jpg");
@@ -333,11 +360,11 @@ int main(int argc, char* argv[])
         color C[8][8];
 
        
-  int machine=0,deujoueur=0,joueur1,joueur2,recm=0,bloq1=0,bloq=0,afficheTop=0,affichemove=0,nivaux=0,win1=1,win2=0,win3=0,Boll=1,actuliseTOP=0,actulisemove=0,update_score=1;
+  int machine=0,deujoueur=0,joueur1,joueur2,recm=0,bloq1=0,bloq=0,afficheTop=0,affichemove=0,nivaux=0,win1=1,win2=0,win3=0,Boll=1,actuliseTOP=0,actulisemove=0,update_score=1,upload=0,download=0,undo=0,a=0;;
    init:  
      init_TabAvide(T);
      init_TabAvide(C);
-     machine=0,deujoueur=0,joueur1,joueur2,recm=0,bloq1=0,bloq=0,afficheTop=0,affichemove=0,nivaux=0,win1=1,win2=0,win3=0,Boll=1,actuliseTOP=0,actulisemove=0;
+     machine=0,deujoueur=0,joueur1,joueur2,recm=0,bloq1=0,bloq=0,afficheTop=0,affichemove=0,nivaux=0,win1=1,win2=0,win3=0,Boll=1,actuliseTOP=0,actulisemove=0,update_score=1,upload=0,download=0,undo=0,a=0;;
         
         recomencer(T);
  
@@ -356,6 +383,7 @@ int main(int argc, char* argv[])
        if(n)round=noire;
        else round=blanc;
         remplissage(K,T,round,&nb);
+        printf("%dsss",nb);
         printf("%d\n",n);
 
         //fin
@@ -373,9 +401,9 @@ int main(int argc, char* argv[])
     {
         scoreb_tmp=scoreb;
         scoren_tmp=scoren;  
-       
+       forcerK(K,&nb);
         // rectangle
-        SDL_Rect rectMain,rectTabe,rectjeu[8][8],rectVSjoueur,rectVSOrdiN1,rectVSOrdiN2,rectVSOrdiN3,rectBlanc,rectNoire,rectRecm,rectAffichierMove,rectTOPE10,rectlistemovem,rect,rectscoreJ1,rectscoreJ2,rce_i_m,rce_i_a,recVS;
+        SDL_Rect rectMain,rectTabe,rectjeu[8][8],rectVSjoueur,rectVSOrdiN1,rectVSOrdiN2,rectVSOrdiN3,rectBlanc,rectNoire,rectRecm,rectAffichierMove,rectTOPE10,rectlistemovem,rect,rectscoreJ1,rectscoreJ2,rce_i_m,rce_i_a,recVS,rect_download,rect_upload,rect_undo,rectTexS1,rectTextS2,rct;
         SDL_GetWindowSize(win,&(rectMain.w),&(rectMain.h));
         makerect(&rectMain,0,0,rectMain.w,rectMain.h);
         
@@ -441,15 +469,20 @@ int main(int argc, char* argv[])
         SDL_RenderCopy(renderer,TexMain,NULL,&rectMain);
         SDL_RenderCopy(renderer,Textab,NULL,&rectTabe);
         
-        makerect(&rectRecm,rectMain.x+rectMain.w*0.01,rectMain.y+rectMain.h*0.01,rectMain.w*0.1,rectMain.h*0.13);
+        makerect(&rectRecm,rectMain.x+rectMain.w*0.01,rectMain.y+rectMain.h*0.01,rectMain.w*0.04,rectMain.h*0.05);
         SDL_RenderCopy(renderer,textrecm,NULL,&rectRecm);
        
-        makerect(&rectAffichierMove,rectRecm.x +rectRecm.w+rectMain.w*0.01 ,rectRecm.y,rectMain.w*0.1,rectMain.h*0.13);
+        makerect(&rectAffichierMove,rectRecm.x +rectRecm.w+rectMain.w*0.01 ,rectRecm.y,rectMain.w*0.04,rectMain.h*0.05);
         SDL_RenderCopy(renderer,textmove,NULL,&rectAffichierMove);
         
-        makerect(&rectTOPE10,rectAffichierMove.x +rectAffichierMove.w+rectMain.w*0.01 ,rectRecm.y,rectMain.w*0.1,rectMain.h*0.13);
+        makerect(&rectTOPE10,rectAffichierMove.x +rectAffichierMove.w+rectMain.w*0.01 ,rectRecm.y,rectMain.w*0.04,rectMain.h*0.05);
         SDL_RenderCopy(renderer,text10top,NULL,&rectTOPE10);
-        
+        makerect(&rect_download,rectTOPE10.x +rectTOPE10.w+rectMain.w*0.01 ,rectRecm.y,rectMain.w*0.04,rectMain.h*0.05);
+        SDL_RenderCopy(renderer,T_download,NULL,&rect_download);
+        makerect(&rect_upload,rect_download.x +rect_download.w+rectMain.w*0.01 ,rectRecm.y,rectMain.w*0.04,rectMain.h*0.05);
+        SDL_RenderCopy(renderer,T_UPload,NULL,&rect_upload);
+        makerect(&rect_undo,rect_upload.x +rect_upload.w+rectMain.w*0.01 ,rectRecm.y,rectMain.w*0.04,rectMain.h*0.05);
+        SDL_RenderCopy(renderer,T_undo,NULL,&rect_undo);
     
         if(round==pi) SDL_RenderCopy(renderer,I_joueur,NULL,&rce_i_a);
         if(round!=pi&&nivaux!=-1) SDL_RenderCopy(renderer,I_Machi,NULL,&rce_i_m);
@@ -529,7 +562,7 @@ int main(int argc, char* argv[])
                    
                     for(int i=0;i<261;i+=30)
                     {
-                    itoa((D[i/30].score),S_j,8);
+                    itoa((D[i/30].score),S_j,10);
                     // strcat(text,"");
                     strcat(text,D[i/30].usrname);
                     char split[12]={"  :"};
@@ -629,7 +662,54 @@ int main(int argc, char* argv[])
         } 
             
 
-        renderer=changerlatableaux(T,renderer,textBlanc,textNoire,textPoint,K,nb,rectTabe,rectjeu,Boll); 
+        renderer=changerlatableaux(T,renderer,textBlanc,textNoire,textPoint,K,nb,rectTabe,rectjeu,Boll);
+         
+        if(bloq1||(scoren+scoreb==64))
+        {
+            a=1;
+            makerect(&rct,rectMain.w/2-rectMain.w/6,rectMain.h/2-rectMain.h/6,rectMain.w/3,rectMain.h/3);
+            if(player.score<scoreb&& pi==blanc) player.score=scoreb;
+            if(player.score<scoren&& pi==noire) player.score=scoren;
+            char C_oldscore[3],C_new[3],b[16]={"Score:"},t[16]={"Record:"};
+            if(pi==blanc)
+            {
+                itoa(scoreb,C_new,10);
+                itoa(player.score,C_oldscore,10);
+            }
+            if(pi==noire)
+            {
+                itoa(scoren,C_new,10);
+                itoa(player.score,C_oldscore,10);
+            }
+            strcat(t,C_oldscore);
+            strcat(b,C_new);
+            int w,h;
+            S_textS1=TTF_RenderText_Blended(font_S,t,color_write);//TTF_RenderText_Solid(USER,text,color_write);
+            T_textS1=SDL_CreateTextureFromSurface(renderer,S_textS1);
+            SDL_QueryTexture(T_textS1,NULL,NULL,&w,&h);
+            makerect(&rectTexS1,rectMain.w*0.389,rectMain.h*0.5,w,h);
+            S_textS2=TTF_RenderText_Blended(font_S,b,color_write);//TTF_RenderText_Solid(USER,text,color_write);
+            T_textS2=SDL_CreateTextureFromSurface(renderer,S_textS2);
+            SDL_QueryTexture(T_textS2,NULL,NULL,&w,&h);
+            makerect(&rectTextS2,rectMain.w*0.52,rectMain.h*0.5,w,h);
+            bloq=0,bloq1=0;
+            recomencer(T);
+            remplissage(K,T,round,&nb);
+            if(scoren==player.score)
+            {
+                modifierbasedonnees(player);
+                actuliseTOP=1;
+            }
+            
+
+        } 
+       if(a) {
+           SDL_RenderCopy(renderer,T_Gameover,NULL,&rct);
+           SDL_RenderCopy(renderer,T_textS1,NULL,&rectTexS1);
+           SDL_RenderCopy(renderer,T_textS2,NULL,&rectTextS2);
+           
+       
+       }
        
         SDL_RenderPresent(renderer);
         }
@@ -670,7 +750,7 @@ int main(int argc, char* argv[])
         {
 
         Copiejeu(C,T);                          
-        // SDL_Delay(500);                       
+        SDL_Delay(500);                       
         jeuAI(T,K,&nb,Adversaire(pi),N2,K2) ,Boll=1;//
          if(!GitXetYdejeu(&x,&y,C,T))
             {
@@ -759,7 +839,31 @@ int main(int argc, char* argv[])
                             goto init;
                         }
                             
-
+                        if(SDL_click(rect_undo,event))
+                        {
+                            if(nivaux==-1)
+                            {
+                            jeupresdent(T,&pile);
+                            remplissage(K,T,pile.toutMove[pile.nbr].joueur,&nb);
+                            round=Adversaire(pile.toutMove[pile.nbr].joueur),Boll=1;
+                            }
+                            if(nivaux!=-1)
+                            {
+                            jeupresdent(T,&pile);
+                            jeupresdent(T,&pile);
+                            remplissage(K,T,pile.toutMove[pile.nbr].joueur,&nb);
+                            round=Adversaire(pile.toutMove[pile.nbr].joueur),Boll=1;
+                            }
+                        }
+                        if(SDL_click(rect_upload,event))
+                        { 
+                            sauvgarde(T,player,nivaux,round);
+                        }
+                        if(SDL_click(rect_download,event))
+                        { 
+                            charegerjeu(player,T,&nivaux,&round);
+                            remplissage(K,T,pi,&nb);
+                        }
 
 
                            if(SDL_click(rectTabe,event)){ 
@@ -889,7 +993,9 @@ int main(int argc, char* argv[])
         
 
     }
-    if(bloq1==1) printf("je suis dans blque?xxxxx\n");
+    printf("salina\n");
+    printf("%dssaaa\n",done);
+    // if(bloq1==1)
     TTF_Quit();
     SDL_DestroyTexture(text2joueur);
     SDL_DestroyTexture(textcolorblanc);

@@ -575,8 +575,8 @@ void testvalue(int nb,int K[2][25],int value,int depth,color COPIE[8][8],color p
 
 int testcase(int K[][25],int nb,int x,int y)
 {
-       int n=0,i, j; 
-for(j=0;j<25;j++)
+       int n=0,j; 
+for(j=0;j<nb;j++)
 {
     if(K[0][j]==x)
     {
