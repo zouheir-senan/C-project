@@ -728,16 +728,23 @@ void jeuAI(color T[][8],int K[2][25],int *nb,color pi,int depth,int K2[2]){
                 K1[0][g]=K[0][g];
                 K1[1][g]=K[1][g];
             }
+           if(nb!=0)
+           {
             value=alphabeta(depth,1,COPIE,pi,K1,-999,999);
             testvalue(nb,K,value,depth,COPIE,pi,K2);
             transformerpierre(T,K2[0],K2[1],pi);
+           }
 
 }
 void jeualeatoire(color T[][8],int K[2][25],int *nb,color pi){
 remplissage(K,T,pi,&nb);
 srnad(time(NULL));
+if(nb!=0)
+{
 int a=rand()%(*nb);
 transformerpierre(T,K[0][a],K[1][a],pi);
+}
+return;
 }
 
 int main()

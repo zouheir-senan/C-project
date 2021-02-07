@@ -219,7 +219,7 @@ void remplissage(int K[2][25],color T[8][8],color pi,int *nb)
 void transformerpierre(color T[8][8],int x,int y,color pi)
 {
     int i=0;
-    int m=0,n=0;
+    int m=0;
     color c=vide;
     if(pi==noire)  c=blanc;
     if(pi==blanc) c=noire;
@@ -423,7 +423,7 @@ int alphabeta(int depth,int etatAI,color COPIE[8][8],color pi,int K[2][25],int a
     int value=10;
     int nb;
     int i;
-    int j;
+   
     
     if(depth==0)
     {
@@ -575,8 +575,8 @@ void testvalue(int nb,int K[2][25],int value,int depth,color COPIE[8][8],color p
 
 int testcase(int K[][25],int nb,int x,int y)
 {
-       int n=0,j; 
-for(j=0;j<nb;j++)
+       int n=0; 
+for(int j=0;j<nb;j++)
 {
     if(K[0][j]==x)
     {
@@ -594,19 +594,17 @@ void jeuAI(color T[][8],int K[2][25],int *nb,color pi,int depth,int K2[2])
 {
     
    
-    int r;
-    int x1=0;
-    int x2=0;
-    int max2=0;
+    
+   
+    
     int K1[2][25];
     int value=0;
     color COPIE[8][8];
-    int h=0;
-    int k=0;
-    char co1;
-    char co2;
-    int i=0,j=0,n=0;
-    color c=blanc;// sss
+    
+    
+   
+
+    // sss
             for(int g=0;g<8;g++)
             {
                 for(int j=0;j<8;j++)
@@ -627,8 +625,8 @@ void jeuAI(color T[][8],int K[2][25],int *nb,color pi,int depth,int K2[2])
                     COPIE[g][j]=T[g][j];
                 }
             }
-            testvalue(*nb,K,value,depth,COPIE,pi,K2);
-            printf("%d,%d\n",K2[0],K2[1]);
+            if((*nb)!=0)testvalue(*nb,K,value,depth,COPIE,pi,K2);
+           
             transformerpierre(T,K2[0],K2[1],pi);
             remplissage(K,T,Adversaire(pi),nb);
 
@@ -637,20 +635,26 @@ void jeuAI(color T[][8],int K[2][25],int *nb,color pi,int depth,int K2[2])
 void jeualeatoire(color T[][8],int K[2][25],int *nb,color pi)
 {
     
+    if((*nb)!=0)
+    {
     srand(time(NULL));
     int a=rand()%(*nb);
     transformerpierre(T,K[0][a],K[1][a],pi);
+    }
     remplissage(K,T,Adversaire(pi),nb);
 }
 
 int jeu(color T[][8],int K[2][25],int *nb,color pi,int x,int y)
 {
     int a=0;
-    if(testcase(K,*nb,x,y)) 
+    if(*nb!=0)
     {
-        transformerpierre(T,x,y,pi);
-        a=1;
-        remplissage(K,T,Adversaire(pi),nb);
+        if(testcase(K,*nb,x,y)) 
+        {
+            transformerpierre(T,x,y,pi);
+            a=1;
+            remplissage(K,T,Adversaire(pi),nb);
+            }
         }
     return a;
 

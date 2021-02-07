@@ -69,7 +69,7 @@ FILE *flot;
 joueur A,MAX;
 joueur *DixM=(joueur*)malloc(sizeof(joueur)*10);
 
-int i=0,bool,j;
+int i=0,j;
 while (i<10)
 {
 flot=fopen(JOUEURS,"rb");
@@ -79,7 +79,7 @@ if(!flot){
     exit(-1);
 }
 
-bool=0;
+
 MAX.score=0;
 MAX.cle=0;
 strcpy(MAX.usrname,"");
@@ -111,7 +111,7 @@ return DixM;
 void chargerdata(void){
 FILE *flot;
 joueur A;
-char nom[20];
+
 flot=fopen(JOUEURS,"rb");
 if(!flot){
     printf("pb d'ouverture de fichier\n");
@@ -212,10 +212,9 @@ fclose(flot);
 
 
 cle=hash(crypto(password));
-int a;
-srand(time(NULL));
-a=rand();
-A=ccrerJoueur(nom,a,cle);
+
+
+A=ccrerJoueur(nom,0,cle);
 
 flot=fopen("dataDeJoueur.dat","ab");
 if(!flot){

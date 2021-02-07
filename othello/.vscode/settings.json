@@ -2,6 +2,8 @@
     "C_Cpp.errorSquiggles": "Disabled",
     "files.associations": {
         "fonction_tritement_fichier.h": "c",
-        "logique_jeu.h": "c"
+        "logique_jeu.h": "c",
+        "sdl_ttf.h": "c",
+        "sdlfonction.h": "c"
     }
 }
