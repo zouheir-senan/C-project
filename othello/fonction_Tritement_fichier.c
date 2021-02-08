@@ -68,6 +68,14 @@ joueur *DixMeilleursScores(void){
 FILE *flot;
 joueur A,MAX;
 joueur *DixM=(joueur*)malloc(sizeof(joueur)*10);
+joueur j1;
+strcpy(j1.usrname,"vide");
+j1.cle=0;
+j1.score=0;
+for(int j=0;j<10;j++)
+{
+DixM[j]=j1;
+}
 
 int i=0,j;
 while (i<10)

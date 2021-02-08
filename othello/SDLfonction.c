@@ -288,7 +288,10 @@ SDL_FreeSurface(Surface1);
 TTF_Font *USER;
 SDL_Color color_write={0,0,0};
 USER=TTF_OpenFont("font.ttf",15);
-
+SDL_Surface *icon=NULL;
+icon=IMG_Load("image/icon.png");
+SDL_SetWindowIcon(win,icon);
+ SDL_FreeSurface(icon);
     SDL_bool done = SDL_FALSE;
     SDL_StartTextInput();
      while (!done)
@@ -629,7 +632,7 @@ SDL_Renderer *Game(SDL_Window *win,SDL_Renderer *renderer,joueur player)
     pilemove pile;
     pile.nbr=-1;
     
-   
+    printf("%s",player.usrname);
     // int posX = SDL_WINDOWPOS_CENTERED, posY = SDL_WINDOWPOS_CENTERED, width = 1020, height = 600;
 
     // intiSDL
@@ -734,11 +737,11 @@ SDL_Renderer *Game(SDL_Window *win,SDL_Renderer *renderer,joueur player)
         color C[8][8];
 
        
-  int bloq1=0,bloq=0,afficheTop=0,affichemove=0,nivaux=0,win1=1,win2=0,win3=0,Boll=1,actuliseTOP=0,actulisemove=0,update_score=1,a=0;;
+  int bloq1=0,bloq=0,afficheTop=0,affichemove=0,nivaux=0,win1=1,win2=0,win3=0,Boll=1,actuliseTOP=1,actulisemove=0,update_score=1,a=0,new_score=player.score;
    init:  
      init_TabAvide(T);
      init_TabAvide(C);
-     bloq1=0,bloq=0,afficheTop=0,affichemove=0,nivaux=0,win1=1,win2=0,win3=0,Boll=1,actuliseTOP=0,actulisemove=0,update_score=1,a=0;;
+     bloq1=0,bloq=0,afficheTop=0,affichemove=0,nivaux=0,win1=1,win2=0,win3=0,Boll=1,actuliseTOP=1,actulisemove=0,update_score=1,a=0,new_score=player.score;
         
         recomencer(T);
  
@@ -757,8 +760,16 @@ SDL_Renderer *Game(SDL_Window *win,SDL_Renderer *renderer,joueur player)
        if(n)round=noire;
        else round=blanc;
         remplissage(K,T,round,&nb);
-        printf("%dsss",nb);
-        printf("%d\n",n);
+        // for(int i=0;i<8;i++){
+        //     printf("\n");
+        //     for(int j=0;j<8;j++){
+        //         if(T[i][j]==vide) printf("|   |");
+        //         if(T[i][j]==blanc) printf("| B |");
+        //         if(T[i][j]==noire) printf("| N |");
+        //     }
+        //     printf("\n");
+        //     }
+        
 
         //fin
         TTF_Init();
@@ -771,8 +782,51 @@ SDL_Renderer *Game(SDL_Window *win,SDL_Renderer *renderer,joueur player)
     SDL_Texture *T_text;
     
 
+SDL_Surface *icon=NULL;
+icon=IMG_Load("image/icon.png");
+SDL_SetWindowIcon(win,icon);
+ SDL_FreeSurface(icon);
+   
+// int yy=1,xx=0;
     while (!done)
     {
+        
+  
+
+    //  if(win2&&xx){  
+           
+    //        for(int i=0;i<8;i++){
+    //         printf("\n");
+    //         for(int j=0;j<8;j++){
+    //             if(T[i][j]==vide) printf("|   |");
+    //             if(T[i][j]==blanc) printf("| B |");
+    //             if(T[i][j]==noire) printf("| N |");
+    //         }
+    //         printf("\n");
+    //         }
+    //         yy=0;
+    //         xx=0;
+
+    //         }
+
+
+    //  if(win2&&yy){  
+           
+    //        for(int i=0;i<8;i++){
+    //         printf("\n");
+    //         for(int j=0;j<8;j++){
+    //             if(T[i][j]==vide) printf("|   |");
+    //             if(T[i][j]==blanc) printf("| B |");
+    //             if(T[i][j]==noire) printf("| N |");
+    //         }
+    //         printf("\n");
+    //         }
+    //         yy=0;
+    //         xx=1;
+    //         }
+
+
+
         scoreb_tmp=scoreb;
         scoren_tmp=scoren;  
        forcerK(K,&nb);
@@ -837,6 +891,11 @@ SDL_Renderer *Game(SDL_Window *win,SDL_Renderer *renderer,joueur player)
         
         if(win3)
         {
+           
+           
+
+
+
             if(nivaux==-1) Boll=1;
 
         SDL_RenderClear(renderer);
@@ -857,12 +916,18 @@ SDL_Renderer *Game(SDL_Window *win,SDL_Renderer *renderer,joueur player)
         SDL_RenderCopy(renderer,T_UPload,NULL,&rect_upload);
         makerect(&rect_undo,rect_upload.x +rect_upload.w+rectMain.w*0.01 ,rectRecm.y,rectMain.w*0.04,rectMain.h*0.05);
         SDL_RenderCopy(renderer,T_undo,NULL,&rect_undo);
+        
+         
+
+
     
         if(round==pi) SDL_RenderCopy(renderer,I_joueur,NULL,&rce_i_a);
         if(round!=pi&&nivaux!=-1) SDL_RenderCopy(renderer,I_Machi,NULL,&rce_i_m);
         if(round!=pi&&nivaux==-1) SDL_RenderCopy(renderer,I_joueur2,NULL,&rce_i_m);
         if(pi==noire)SDL_RenderCopy(renderer,VSB,NULL,&recVS);
         else SDL_RenderCopy(renderer,VSN,NULL,&recVS);
+
+
 
         if(update_score)
         {
@@ -931,7 +996,8 @@ SDL_Renderer *Game(SDL_Window *win,SDL_Renderer *renderer,joueur player)
                     int y_lis=rectlistemovem.y +rectlistemovem.h*0.05;
                    
                    
-                    char text[301]={""},S_j[10];
+                    char text[301]={},S_j[10];
+                 
                     
                    
                     for(int i=0;i<261;i+=30)
@@ -1038,7 +1104,7 @@ SDL_Renderer *Game(SDL_Window *win,SDL_Renderer *renderer,joueur player)
 
         renderer=changerlatableaux(T,renderer,textBlanc,textNoire,textPoint,K,nb,rectTabe,rectjeu,Boll);
          
-        if(bloq1||(scoren+scoreb==64))
+        if(bloq1||(scoren+scoreb==64)||(scoreb==0||scoren==0))
         {
             a=1;
             makerect(&rct,rectMain.w/2-rectMain.w/6,rectMain.h/2-rectMain.h/6,rectMain.w/3,rectMain.h/3);
@@ -1069,11 +1135,32 @@ SDL_Renderer *Game(SDL_Window *win,SDL_Renderer *renderer,joueur player)
             bloq=0,bloq1=0;
             // recomencer(T);
             // remplissage(K,T,round,&nb);
-            if(scoren==player.score)
+             if(pi==blanc)
             {
+                 
+             
+                if(scoreb>new_score)
+                {   
+                    new_score=scoreb;
+                   
+                    
+                }
+            }
+            else
+            {
+           
+
+                if(scoren>new_score)
+                {
+                     new_score=scoren;
+                    
+                }
+            }
+
+            player.score=new_score;
                 modifierbasedonnees(player);
                 actuliseTOP=1;
-            }
+            
             
 
         } 
@@ -1086,7 +1173,7 @@ SDL_Renderer *Game(SDL_Window *win,SDL_Renderer *renderer,joueur player)
        }
        
         SDL_RenderPresent(renderer);
-        }
+        
 
     if(nivaux==1)
     {
@@ -1167,6 +1254,7 @@ SDL_Renderer *Game(SDL_Window *win,SDL_Renderer *renderer,joueur player)
         }
      
     }
+    }
 
         
         SDL_Event event;
@@ -1190,6 +1278,7 @@ SDL_Renderer *Game(SDL_Window *win,SDL_Renderer *renderer,joueur player)
                     afficheTop=0; affichemove=0;
                        if(win3)
                         {
+
                         if(SDL_click(rectTOPE10,event))
                         { 
                         afficheTop=1;
@@ -1222,7 +1311,7 @@ SDL_Renderer *Game(SDL_Window *win,SDL_Renderer *renderer,joueur player)
                             jeupresdent(T,&pile);
                             jeupresdent(T,&pile);
                             remplissage(K,T,pile.toutMove[pile.nbr].joueur,&nb);
-                            round=Adversaire(pile.toutMove[pile.nbr].joueur),Boll=1;
+                            
                             }
                         }
                         if(SDL_click(rect_upload,event))
@@ -1237,7 +1326,7 @@ SDL_Renderer *Game(SDL_Window *win,SDL_Renderer *renderer,joueur player)
 
 
                            if(SDL_click(rectTabe,event)){ 
-                            
+                           
                                 if(nivaux==-1)
                                 {
                                     if(round==pi)
@@ -1345,16 +1434,9 @@ SDL_Renderer *Game(SDL_Window *win,SDL_Renderer *renderer,joueur player)
                         if(SDL_click(rectVSOrdiN1,event)) nivaux=1;
                         if(SDL_click(rectVSOrdiN2,event)) nivaux=2;
                         if(SDL_click(rectVSOrdiN3,event)) nivaux=3;
-                        // if(nivaux==1)
-                        // {
-                        //     if(pi==round)
-                        //     { 
-                        //         Boll=1;
-                        //     }
-                        //     else  jeualeatoire(T,K,&nb,Adversaire(pi)), Boll=0;
-                    
-                        // }
+
                         if(nivaux!=0) {win1=0;win2=1;win3=0;}
+
                         }
                     }
 
@@ -1362,6 +1444,9 @@ SDL_Renderer *Game(SDL_Window *win,SDL_Renderer *renderer,joueur player)
                      
            
                 case SDL_QUIT:
+                  
+                    // if(pi==blanc)  { if(scoreb>player.score) modifierbasedonnees(player);}
+                    // else {if(scoreb>player.score) modifierbasedonnees(player);}
                     done=SDL_TRUE;
                  
                     break;
@@ -1380,8 +1465,7 @@ SDL_Renderer *Game(SDL_Window *win,SDL_Renderer *renderer,joueur player)
         
 
     }
-    printf("salina\n");
-    printf("%dssaaa\n",done);
+ 
     // if(bloq1==1)
     TTF_Quit();
     SDL_DestroyTexture(text2joueur);
