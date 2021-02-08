@@ -265,11 +265,11 @@ TTF_Init();
 /* Filling the surface with. */
 
 // SDL_FillRect(Surface1, NULL, SDL_MapRGB(Surface1->format, 40, 60, 65));
-Surface1=IMG_Load("Login.png");
-Surface=IMG_Load("image1.jpg");
-SurfaceSign_in=IMG_Load("Sign_in.png");
-SurfaceSign_up=IMG_Load("Sign_up.png");
-Surfaceverfie=IMG_Load("message.png");
+Surface1=IMG_Load("image/Login.png");
+Surface=IMG_Load("image/image1.jpg");
+SurfaceSign_in=IMG_Load("image/Sign_in.png");
+SurfaceSign_up=IMG_Load("image/Sign_up.png");
+Surfaceverfie=IMG_Load("image/message.png");
 //SDL_FillRect(Surface, NULL, SDL_MapRGB(Surface->format, 65, 65, 65));
 Tex = SDL_CreateTextureFromSurface(renderer,Surface);
 
@@ -286,7 +286,7 @@ SDL_FreeSurface(Surface1);
 /*  Creating font. */
 TTF_Font *USER;
 SDL_Color color_write={0,0,0};
-USER=TTF_OpenFont("font.ttf",15);
+USER=TTF_OpenFont("image/font.ttf",15);
 SDL_Surface *icon=NULL;
 icon=IMG_Load("image/icon.png");
 SDL_SetWindowIcon(win,icon);
@@ -775,8 +775,8 @@ SDL_Renderer *Game(SDL_Window *win,SDL_Renderer *renderer,joueur player)
         TTF_Font *USER,*font_S;
     SDL_Color color_write={0,0,0};
     SDL_Color color_g={103,62,44};
-    USER=TTF_OpenFont("font.ttf",15);
-    font_S=TTF_OpenFont("Sansation-Italic.ttf",36);  
+    USER=TTF_OpenFont("image/font.ttf",15);
+    font_S=TTF_OpenFont("image/Sansation-Italic.ttf",36);  
     SDL_Surface *S_text;
     SDL_Texture *T_text;
     
