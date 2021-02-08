@@ -17,15 +17,16 @@ if(SDL_Init(SDL_INIT_VIDEO)!=0)
 win=SDL_CreateWindow("Othello", posX, posY, width, height, SDL_WINDOW_MAXIMIZED|SDL_WINDOW_RESIZABLE);
     if(win==NULL)
         SDL_ExitWithError("CreateWindow",NULL,NULL);
+SDL_Surface *icon=NULL;
+icon=IMG_Load("image/icon.png");
+SDL_SetWindowIcon(win,icon);
+ SDL_FreeSurface(icon);
+
 
 renderer=SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
     if(renderer==NULL)
         SDL_ExitWithError("CreateRenderer",win,NULL);
 // les intreface
-SDL_Surface *icon=NULL;
-icon=IMG_Load("image/icon.png");
-SDL_SetWindowIcon(win,icon);
- SDL_FreeSurface(icon);
 
 int enterjeu=0;
    renderer=intrefaceLogin(win,renderer,&player,&enterjeu);

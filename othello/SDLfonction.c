@@ -80,7 +80,7 @@ int SDL_GetCaseclick(SDL_Rect rectab,int x,int y,int *corx,int *cory)
 
 int i=0,j=0;
 int a=rectab.w/8,b=rectab.h/8;
-printf("%d,%d1\n",a,b);
+
 int X=x-rectab.x,Y=y-rectab.y;
 
 while (i<8)
@@ -229,7 +229,6 @@ int Sign_in=0,Sign_up=0,clickUser=0,clickPass=0,AfficherUser=0,AfficherPass=0,te
 int Sign_in1=0;
 int Sign_up1=0;
 
-printf("%d\n",SDL_TTF_MAJOR_VERSION);    
 
 
 SDL_Texture *Tex = NULL;
@@ -328,13 +327,13 @@ SDL_SetWindowIcon(win,icon);
                 
                     if(textinput)
                         { 
-                            SurfaceUSER=TTF_RenderText_Solid(USER,username,color_write);
+                            SurfaceUSER=TTF_RenderText_Blended(USER,username,color_write);
                             TexUSER = SDL_CreateTextureFromSurface(renderer,SurfaceUSER);
                             int h,w;
                             SDL_QueryTexture(TexUSER,NULL,NULL,&w,&h);
                             makerect(&rectangleUserText,rectangleUsr.x,rectangleUsr.y*1.02,w,h);
                             SDL_FreeSurface(SurfaceUSER);
-                            SurfacePass=TTF_RenderText_Solid(USER,MotDePasse,color_write);
+                            SurfacePass=TTF_RenderText_Blended(USER,MotDePasse,color_write);
                             TexPass = SDL_CreateTextureFromSurface(renderer,SurfacePass);
                             
                             SDL_QueryTexture(TexPass,NULL,NULL,&w,&h);
@@ -401,7 +400,7 @@ SDL_SetWindowIcon(win,icon);
 
                     if(verfie)
                     {
-                        SurfaceverfieText=TTF_RenderText_Solid(USER,message,color_write);
+                        SurfaceverfieText=TTF_RenderText_Blended(USER,message,color_write);
                         TexverfieText= SDL_CreateTextureFromSurface(renderer,SurfaceverfieText);
                         int h,w;
                         SDL_QueryTexture(TexverfieText,NULL,NULL,&w,&h);
@@ -452,7 +451,7 @@ SDL_SetWindowIcon(win,icon);
                                             strcpy(username,""); 
                                             textinput=1;
                                             strcpy(message,"le mot de passe est faux");
-                                            printf("zouheir\n");
+                                           
                                         }
                                         if(a==1)
                                         {
@@ -474,7 +473,7 @@ SDL_SetWindowIcon(win,icon);
                                             strcpy(username,""); 
                                             textinput=1;
                                             strcpy(message,"cette compte nexiste pas ");
-                                            printf("zouheir\n");
+                                            
                                         }
                                         AfficherMessage=1;
                                     }
@@ -632,7 +631,7 @@ SDL_Renderer *Game(SDL_Window *win,SDL_Renderer *renderer,joueur player)
     pilemove pile;
     pile.nbr=-1;
     
-    printf("%s",player.usrname);
+ 
     // int posX = SDL_WINDOWPOS_CENTERED, posY = SDL_WINDOWPOS_CENTERED, width = 1020, height = 600;
 
     // intiSDL
@@ -938,10 +937,10 @@ SDL_SetWindowIcon(win,icon);
           
             itoa(scoren,S_N,10);
             
-            puts(S_N);
-            S_ScoreB=TTF_RenderText_Solid(font_S,S_B,color_g);
+            
+            S_ScoreB=TTF_RenderText_Blended(font_S,S_B,color_g);
             T_ScoreB= SDL_CreateTextureFromSurface(renderer,S_ScoreB);
-            S_ScoreN=TTF_RenderText_Solid(font_S,S_N,color_g);
+            S_ScoreN=TTF_RenderText_Blended(font_S,S_N,color_g);
             T_ScoreN= SDL_CreateTextureFromSurface(renderer,S_ScoreN);
             
             

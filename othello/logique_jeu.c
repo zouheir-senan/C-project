@@ -413,7 +413,7 @@ fonction alphabeta(nœud, α, β)  α est toujours inférieur à β
 
 
 
-int alphabeta(int depth,int etatAI,color COPIE[8][8],color pi,int K[2][25],int alpha,int beta)
+int alphabetanoire(int depth,int etatAI,color COPIE[8][8],color pi,int K[2][25],int alpha,int beta)
 {
     
     
@@ -466,7 +466,7 @@ int alphabeta(int depth,int etatAI,color COPIE[8][8],color pi,int K[2][25],int a
 
                 
                 
-                value=max1(value,alphabeta(depth-1,0,COPIE,pi,K,alpha,beta));
+                value=max1(value,alphabetanoire(depth-1,0,COPIE,pi,K,alpha,beta));
 
                 if(value>=beta) 
                 {
@@ -512,7 +512,127 @@ int alphabeta(int depth,int etatAI,color COPIE[8][8],color pi,int K[2][25],int a
                 transformerpierre(COPIE,K[0][i],K[1][i],pi);
 
                 
-                value=min1(value,alphabeta(depth-1,1,COPIE,pi,K,alpha,beta));
+                value=min1(value,alphabetanoire(depth-1,1,COPIE,pi,K,alpha,beta));
+               
+                
+                
+                if(alpha>=value)
+                {
+                   return value;
+                }
+                beta=min1(beta,value);
+            }
+            
+            
+            
+
+            
+            
+        }
+    }
+    return value;
+}
+
+int alphabetablanc(int depth,int etatAI,color COPIE[8][8],color pi,int K[2][25],int alpha,int beta)
+{
+    
+    
+    
+   
+    
+    int value=10;
+    int nb;
+    int i;
+   
+    
+    if(depth==0)
+    {
+        
+        
+       
+        return calculnum(COPIE,blanc);
+
+        
+    }
+    else
+    {
+        if(etatAI==1)
+        {
+            pi=blanc;
+            nb=0;
+            value=-999;
+            remplissage(K,COPIE,pi,&nb);
+            color copie1[8][8];
+            for(int m=0;m<8;m++)
+            {
+                for(int j=0;j<8;j++)
+                {
+                    copie1[m][j]=COPIE[m][j];
+                }
+            }
+            for(i=0;i<nb;i++)
+            {
+                remplissage(K,copie1,pi,&nb);
+                for(int m=0;m<8;m++)
+                {
+                    for(int j=0;j<8;j++)
+                    {
+                        COPIE[m][j]=copie1[m][j];
+                    }
+                }
+
+                
+                transformerpierre(COPIE,K[0][i],K[1][i],pi);
+
+                
+                
+                value=max1(value,alphabetablanc(depth-1,0,COPIE,pi,K,alpha,beta));
+
+                if(value>=beta) 
+                {
+                    return value;
+                }
+                alpha=max1(alpha,value);
+                
+            }
+            
+            
+            
+            
+            
+            
+            
+            
+        }
+        else
+        {
+            pi=noire;
+            nb=0;
+            value=999;
+            remplissage(K,COPIE,pi,&nb);
+            color copie1[8][8];
+            for(int m=0;m<8;m++)
+            {
+                for(int j=0;j<8;j++)
+                {
+                    copie1[m][j]=COPIE[m][j];
+                }
+            }
+            for(i=0;i<nb;i++)
+            {
+                remplissage(K,copie1,pi,&nb);
+                for(int m=0;m<8;m++)
+                {
+                    for(int j=0;j<8;j++)
+                    {
+                        COPIE[m][j]=copie1[m][j];
+                    }
+                }
+                
+                transformerpierre(COPIE,K[0][i],K[1][i],pi);
+
+                
+                value=min1(value,alphabetablanc(depth-1,1,COPIE,pi,K,alpha,beta));
                
                 
                 
@@ -556,10 +676,15 @@ void testvalue(int nb,int K[2][25],int value,int depth,color COPIE[8][8],color p
         }
         transformerpierre(T1,K[0][i],K[1][i],pi);
         remplissage(K1,T1,pi,&m);
-        value1=alphabeta(depth-1,0,T1,pi,K1,alpha,beta);
+        if(pi==noire){
+        value1=alphabetanoire(depth-1,0,T1,pi,K1,alpha,beta);
+        }
+        if(pi==blanc){
+        value1=alphabetablanc(depth-1,0,T1,pi,K1,alpha,beta);
+        }
         if(value1==value)
         {
-            printf("am in \n");
+          
             K2[0]=K[0][i];
             K2[1]=K[1][i];
             break;
@@ -567,7 +692,7 @@ void testvalue(int nb,int K[2][25],int value,int depth,color COPIE[8][8],color p
         }
         i++;
     }
-    printf("%d,%d\n",K2[0],K2[1]);
+
     
     
 
@@ -617,7 +742,14 @@ void jeuAI(color T[][8],int K[2][25],int *nb,color pi,int depth,int K2[2])
                 K1[0][g]=K[0][g];
                 K1[1][g]=K[1][g];
             }
-            value=alphabeta(depth,1,COPIE,pi,K1,-999,999);
+            if(pi==noire)
+            {
+            value=alphabetanoire(depth,1,COPIE,pi,K1,-999,999);
+            }
+            if(pi==blanc)
+            {
+            value=alphabetablanc(depth,1,COPIE,pi,K1,-999,999);
+            }
              for(int g=0;g<8;g++)
             {
                 for(int j=0;j<8;j++)

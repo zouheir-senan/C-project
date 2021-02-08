@@ -116,34 +116,34 @@ i++;
 fclose(flot);}
 return DixM;
 }
-void chargerdata(void){
-FILE *flot;
-joueur A;
+// void chargerdata(void){
+// FILE *flot;
+// joueur A;
 
-flot=fopen(JOUEURS,"rb");
-if(!flot){
-    printf("pb d'ouverture de fichier\n");
-    getch();
-    exit(-1);
-}
-while (fread(&A,sizeof(A),1,flot))
-{
-printf("%d\n",A.score);
-printf("%d\n",A.cle);
-printf("%s\n",A.usrname);
-printf("\n------------------------------\n");
-}
-fclose(flot);
-}
-void afficher(joueur *liste){
-for (size_t i = 0; i < 10; i++)
-{
-printf("%d\n",liste[i].score);
-printf("%d\n",liste[i].cle);
-printf("%s\n",liste[i].usrname);
-printf("\n------------------------------\n");
-}
-}
+// flot=fopen(JOUEURS,"rb");
+// if(!flot){
+//     printf("pb d'ouverture de fichier\n");
+//     getch();
+//     exit(-1);
+// }
+// while (fread(&A,sizeof(A),1,flot))
+// {
+// printf("%d\n",A.score);
+// printf("%d\n",A.cle);
+// printf("%s\n",A.usrname);
+// printf("\n------------------------------\n");
+// }
+// fclose(flot);
+// }
+// void afficher(joueur *liste){
+// for (size_t i = 0; i < 10; i++)
+// {
+// printf("%d\n",liste[i].score);
+// printf("%d\n",liste[i].cle);
+// printf("%s\n",liste[i].usrname);
+// printf("\n------------------------------\n");
+// }
+// }
 
 
 
